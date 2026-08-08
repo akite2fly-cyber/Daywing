@@ -62,8 +62,10 @@ def ensure_env() -> dict[str, str]:
 
     # Process environment wins (used on Render / Railway / Fly)
     for key in ("SECRET_KEY", "DAYWING_PASSWORD", "DAYWING_PASSWORD_HASH", "DATA_DIR"):
-        if os.environ.get(key):
-            values[key] = os.environ[key]
+        raw = os.environ.get(key)
+        if raw:
+            # Strip accidental spaces/newlines from hosted env values
+            values[key] = raw.strip() if key.startswith("DAYWING_") else raw
 
     changed = False
 
@@ -109,11 +111,11 @@ app.config.update(
 
 # Resolve password hash once at startup (hosted env may provide plaintext password)
 _PASSWORD_HASH = (
-    os.environ.get("DAYWING_PASSWORD_HASH")
-    or _ENV.get("DAYWING_PASSWORD_HASH")
+    (os.environ.get("DAYWING_PASSWORD_HASH") or "").strip()
+    or (_ENV.get("DAYWING_PASSWORD_HASH") or "").strip()
     or (
-        generate_password_hash(os.environ["DAYWING_PASSWORD"])
-        if os.environ.get("DAYWING_PASSWORD")
+        generate_password_hash(os.environ["DAYWING_PASSWORD"].strip())
+        if (os.environ.get("DAYWING_PASSWORD") or "").strip()
         else ""
     )
 )
@@ -121,6 +123,15 @@ _PASSWORD_HASH = (
 
 def password_hash() -> str:
     return _PASSWORD_HASH
+
+
+def password_is_valid(password: str) -> bool:
+    """Accept the hosted plaintext password or a stored hash."""
+    plain = (os.environ.get("DAYWING_PASSWORD") or "").strip()
+    if plain and secrets.compare_digest(password, plain):
+        return True
+    hashed = (os.environ.get("DAYWING_PASSWORD_HASH") or "").strip() or _PASSWORD_HASH
+    return bool(hashed) and check_password_hash(hashed, password)
 
 
 def utc_now() -> str:
@@ -268,8 +279,7 @@ def login():
 @app.post("/login")
 def login_submit():
     password = request.form.get("password", "")
-    hashed = password_hash()
-    if hashed and check_password_hash(hashed, password):
+    if password_is_valid(password):
         session.clear()
         session["authenticated"] = True
         session.permanent = True
