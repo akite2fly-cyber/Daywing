@@ -144,6 +144,7 @@ def close_db(_exc: BaseException | None = None) -> None:
 
 
 def init_db() -> None:
+    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     db = sqlite3.connect(DB_PATH)
     db.execute(
         """
