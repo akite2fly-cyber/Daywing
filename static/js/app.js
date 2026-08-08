@@ -327,33 +327,171 @@ const iconPicker = document.getElementById("icon-picker");
 const appointmentsGrid = document.getElementById("appointments-grid");
 
 const PLAN_ICONS = [
-  { id: "general", label: "General", glyph: "✦", detail: "Extra details…" },
-  { id: "work", label: "Work", glyph: "briefcase", detail: "Project, link, or notes…" },
-  { id: "doctor", label: "Doctor", glyph: "plus", detail: "Clinic, address, or prep notes…" },
-  { id: "meeting", label: "Meeting", glyph: "people", detail: "Where / agenda…" },
-  { id: "home", label: "Home", glyph: "home", detail: "What needs doing…" },
-  { id: "school", label: "School", glyph: "book", detail: "Class, assignment, or notes…" },
-  { id: "fitness", label: "Fitness", glyph: "bolt", detail: "Workout plan…" },
-  { id: "shopping", label: "Shopping", glyph: "bag", detail: "Store or list…" },
-  { id: "travel", label: "Travel", glyph: "plane", detail: "Flight, hotel, or destination…" },
-  { id: "call", label: "Call", glyph: "phone", detail: "Who to call / number…" },
-  { id: "bill", label: "Bills", glyph: "card", detail: "Account or amount…" },
-  { id: "meal", label: "Meal", glyph: "fork", detail: "Menu ideas or place…" },
-  { id: "birthday", label: "Birthday", glyph: "gift", detail: "Who is it for? Gift ideas…" },
-  { id: "reminder", label: "Reminder", glyph: "bell", detail: "What to remember…" },
+  {
+    id: "general",
+    label: "General",
+    glyph: "✦",
+    editorTitle: "General plan",
+    titleHint: "What do you need to do?",
+    detailLabel: "Details",
+    detail: "Write anything helpful…",
+  },
+  {
+    id: "work",
+    label: "Work",
+    glyph: "briefcase",
+    editorTitle: "Work editor",
+    titleHint: "Meeting, deadline, or task…",
+    detailLabel: "Work details",
+    detail: "Project, link, coworkers, or notes…",
+  },
+  {
+    id: "doctor",
+    label: "Doctor",
+    glyph: "plus",
+    editorTitle: "Doctor editor",
+    titleHint: "Appointment name…",
+    detailLabel: "Visit details",
+    detail: "Clinic, address, doctor name, or prep notes…",
+  },
+  {
+    id: "meeting",
+    label: "Meeting",
+    glyph: "people",
+    editorTitle: "Meeting editor",
+    titleHint: "Who are you meeting?",
+    detailLabel: "Meeting details",
+    detail: "Place, video link, or agenda…",
+  },
+  {
+    id: "home",
+    label: "Home",
+    glyph: "home",
+    editorTitle: "Home editor",
+    titleHint: "Chore or home plan…",
+    detailLabel: "Home details",
+    detail: "What needs doing, supplies, or notes…",
+  },
+  {
+    id: "school",
+    label: "School",
+    glyph: "book",
+    editorTitle: "School editor",
+    titleHint: "Class or assignment…",
+    detailLabel: "School details",
+    detail: "Teacher, due date notes, or materials…",
+  },
+  {
+    id: "fitness",
+    label: "Fitness",
+    glyph: "bolt",
+    editorTitle: "Fitness editor",
+    titleHint: "Workout or activity…",
+    detailLabel: "Fitness details",
+    detail: "Workout plan, place, or goals…",
+  },
+  {
+    id: "shopping",
+    label: "Shopping",
+    glyph: "bag",
+    editorTitle: "Shopping editor",
+    titleHint: "Store or errand…",
+    detailLabel: "Shopping list",
+    detail: "Items to buy, store, or budget notes…",
+  },
+  {
+    id: "travel",
+    label: "Travel",
+    glyph: "plane",
+    editorTitle: "Travel editor",
+    titleHint: "Trip or departure…",
+    detailLabel: "Travel details",
+    detail: "Flight, hotel, destination, or packing notes…",
+  },
+  {
+    id: "call",
+    label: "Call",
+    glyph: "phone",
+    editorTitle: "Call editor",
+    titleHint: "Who to call…",
+    detailLabel: "Call details",
+    detail: "Phone number, topic, or reminders…",
+  },
+  {
+    id: "bill",
+    label: "Bills",
+    glyph: "card",
+    editorTitle: "Bills editor",
+    titleHint: "Bill or payment…",
+    detailLabel: "Bill details",
+    detail: "Account, amount, due notes…",
+  },
+  {
+    id: "meal",
+    label: "Meal",
+    glyph: "fork",
+    editorTitle: "Meal editor",
+    titleHint: "Breakfast, lunch, dinner…",
+    detailLabel: "Meal details",
+    detail: "Recipe, place, guests, or grocery needs…",
+  },
+  {
+    id: "birthday",
+    label: "Birthday",
+    glyph: "gift",
+    editorTitle: "Birthday editor",
+    titleHint: "Whose birthday?",
+    detailLabel: "Birthday details",
+    detail: "Gift ideas, party plans, card notes…",
+  },
+  {
+    id: "reminder",
+    label: "Reminder",
+    glyph: "bell",
+    editorTitle: "Reminder editor",
+    titleHint: "What to remember…",
+    detailLabel: "Reminder details",
+    detail: "Anything you don’t want to forget…",
+  },
 ];
 
 let selectedIcon = "general";
 let expandedTaskId = null;
 let monthAppointments = [];
 
+const iconEditorGlyph = document.getElementById("icon-editor-glyph");
+const iconEditorTitle = document.getElementById("icon-editor-title");
+const taskNotesLabel = document.getElementById("task-notes-label");
+const taskAddBtn = document.getElementById("task-add-btn");
+
 function iconMeta(id) {
   return PLAN_ICONS.find((item) => item.id === id) || PLAN_ICONS[0];
 }
 
+function syncIconEditor() {
+  const meta = iconMeta(selectedIcon);
+  if (iconEditorGlyph) {
+    iconEditorGlyph.innerHTML = iconMarkup(meta.glyph, 22);
+  }
+  if (iconEditorTitle) {
+    iconEditorTitle.textContent = meta.editorTitle;
+  }
+  if (taskInput) {
+    taskInput.placeholder = meta.titleHint;
+  }
+  if (taskNotes) {
+    taskNotes.placeholder = meta.detail;
+  }
+  if (taskNotesLabel) {
+    taskNotesLabel.textContent = meta.detailLabel;
+  }
+  if (taskAddBtn) {
+    taskAddBtn.textContent = `Add ${meta.label.toLowerCase()}`;
+  }
+}
+
 function syncDetailPlaceholder() {
-  if (!taskNotes) return;
-  taskNotes.placeholder = iconMeta(selectedIcon).detail;
+  syncIconEditor();
 }
 
 function formatTimeLabel(value) {
@@ -419,16 +557,20 @@ function renderIconPicker() {
     btn.dataset.icon = item.id;
     btn.setAttribute("role", "option");
     btn.setAttribute("aria-selected", selectedIcon === item.id ? "true" : "false");
-    btn.title = item.label;
+    btn.title = `${item.label} editor`;
     btn.innerHTML = `${iconMarkup(item.glyph)}<span>${item.label}</span>`;
     btn.addEventListener("click", () => {
       selectedIcon = item.id;
-      syncDetailPlaceholder();
+      syncIconEditor();
       renderIconPicker();
+      if (taskInput) {
+        taskInput.focus({ preventScroll: true });
+        taskForm?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
     });
     iconPicker.appendChild(btn);
   }
-  syncDetailPlaceholder();
+  syncIconEditor();
 }
 
 const today = new Date();
@@ -916,6 +1058,10 @@ function renderTasks() {
       const editor = document.createElement("div");
       editor.className = "task-editor";
 
+      const heading = document.createElement("p");
+      heading.className = "task-editor-heading";
+      heading.textContent = meta.editorTitle;
+
       const row = document.createElement("div");
       row.className = "task-editor-row";
 
@@ -923,7 +1069,7 @@ function renderTasks() {
       titleInput.type = "text";
       titleInput.value = task.title;
       titleInput.maxLength = 240;
-      titleInput.placeholder = "Title";
+      titleInput.placeholder = meta.titleHint;
 
       const timeInput = document.createElement("input");
       timeInput.type = "time";
@@ -931,6 +1077,10 @@ function renderTasks() {
       timeInput.title = "Appointment time";
 
       row.append(titleInput, timeInput);
+
+      const notesLabel = document.createElement("label");
+      notesLabel.className = "field-label";
+      notesLabel.textContent = meta.detailLabel;
 
       const notesInput = document.createElement("textarea");
       notesInput.rows = 3;
@@ -951,7 +1101,7 @@ function renderTasks() {
         expandedTaskId = null;
       });
 
-      editor.append(row, notesInput, save);
+      editor.append(heading, row, notesLabel, notesInput, save);
       li.appendChild(editor);
     }
 
@@ -1154,10 +1304,10 @@ async function openDay(iso) {
   selectedIcon = "general";
   expandedTaskId = null;
   renderIconPicker();
+  syncIconEditor();
   taskInput.value = "";
   if (taskTime) taskTime.value = "";
   if (taskNotes) taskNotes.value = "";
-  syncDetailPlaceholder();
 
   overlay.hidden = false;
   overlay.classList.remove("is-open", "is-revealing", "is-quoting", "is-sheet");
@@ -1258,7 +1408,7 @@ taskForm.addEventListener("submit", async (e) => {
   await addTask(title);
   if (taskTime) taskTime.value = "";
   if (taskNotes) taskNotes.value = "";
-  syncDetailPlaceholder();
+  syncIconEditor();
   taskInput.focus();
 });
 

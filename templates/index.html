@@ -101,33 +101,42 @@
             <p class="section-hint">Add a time and details for each plan</p>
           </div>
           <ul class="task-list" id="task-list"></ul>
+          <p class="section-hint icon-pick-hint">Choose an icon, then fill in its editor</p>
           <div class="icon-picker" id="icon-picker" role="listbox" aria-label="Plan type"></div>
-          <form class="task-form" id="task-form">
-            <label class="sr-only" for="task-input">Add a plan</label>
+          <form class="task-form icon-editor" id="task-form" aria-label="Icon detail editor">
+            <div class="icon-editor-header" id="icon-editor-header">
+              <span class="icon-editor-glyph" id="icon-editor-glyph" aria-hidden="true"></span>
+              <div>
+                <p class="icon-editor-kicker">Icon editor</p>
+                <h4 class="icon-editor-title" id="icon-editor-title">General</h4>
+              </div>
+            </div>
+            <label class="field-label" for="task-input">Title</label>
             <input
               type="text"
               id="task-input"
               class="task-input"
-              placeholder="Add something to plan…"
+              placeholder="What is this plan?"
               maxlength="240"
               autocomplete="off"
+              required
             />
-            <label class="sr-only" for="task-time">Time</label>
+            <label class="field-label" for="task-time">Time</label>
             <input
               type="time"
               id="task-time"
               class="task-time"
               title="Appointment time"
             />
-            <label class="sr-only" for="task-notes">Details</label>
+            <label class="field-label" for="task-notes" id="task-notes-label">Details</label>
             <textarea
               id="task-notes"
               class="task-notes"
-              rows="2"
+              rows="3"
               maxlength="2000"
               placeholder="Details for this plan…"
             ></textarea>
-            <button type="submit" class="task-add-btn">Add</button>
+            <button type="submit" class="task-add-btn" id="task-add-btn">Add to planner</button>
           </form>
         </section>
 
