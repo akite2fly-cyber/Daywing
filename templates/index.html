@@ -48,6 +48,14 @@
         </div>
 
         <div class="day-grid" id="day-grid" role="grid" aria-labelledby="month-title"></div>
+
+        <section class="appointments-panel" aria-label="Month appointments">
+          <div class="section-heading">
+            <h2 class="appointments-title">Appointments</h2>
+            <p class="section-hint">Everything planned this month</p>
+          </div>
+          <div class="appointments-grid" id="appointments-grid"></div>
+        </section>
       </section>
     </main>
 
@@ -90,7 +98,7 @@
         <section class="planner" aria-label="Daily planner">
           <div class="section-heading">
             <h3>Planner</h3>
-            <p class="section-hint">Plans for this day</p>
+            <p class="section-hint">Add a time and details for each plan</p>
           </div>
           <ul class="task-list" id="task-list"></ul>
           <div class="icon-picker" id="icon-picker" role="listbox" aria-label="Plan type"></div>
@@ -104,6 +112,21 @@
               maxlength="240"
               autocomplete="off"
             />
+            <label class="sr-only" for="task-time">Time</label>
+            <input
+              type="time"
+              id="task-time"
+              class="task-time"
+              title="Appointment time"
+            />
+            <label class="sr-only" for="task-notes">Details</label>
+            <textarea
+              id="task-notes"
+              class="task-notes"
+              rows="2"
+              maxlength="2000"
+              placeholder="Details for this plan…"
+            ></textarea>
             <button type="submit" class="task-add-btn">Add</button>
           </form>
         </section>

@@ -177,7 +177,9 @@ def init_db() -> None:
             done INTEGER NOT NULL DEFAULT 0,
             sort_order INTEGER NOT NULL DEFAULT 0,
             created_at TEXT NOT NULL,
-            icon TEXT NOT NULL DEFAULT 'general'
+            icon TEXT NOT NULL DEFAULT 'general',
+            notes TEXT NOT NULL DEFAULT '',
+            start_time TEXT
         )
         """
     )
@@ -188,6 +190,10 @@ def init_db() -> None:
         db.execute(
             "ALTER TABLE tasks ADD COLUMN icon TEXT NOT NULL DEFAULT 'general'"
         )
+    if "notes" not in columns:
+        db.execute("ALTER TABLE tasks ADD COLUMN notes TEXT NOT NULL DEFAULT ''")
+    if "start_time" not in columns:
+        db.execute("ALTER TABLE tasks ADD COLUMN start_time TEXT")
     db.execute(
         "CREATE INDEX IF NOT EXISTS idx_tasks_date ON tasks(entry_date, sort_order, id)"
     )
@@ -212,6 +218,10 @@ TASK_ICONS = {
     "reminder",
 }
 
+TASK_SELECT = (
+    "id, entry_date, title, done, sort_order, created_at, icon, notes, start_time"
+)
+
 
 def normalize_icon(value: object) -> str:
     if isinstance(value, str) and value in TASK_ICONS:
@@ -227,9 +237,41 @@ def parse_date(entry_date: str) -> str | None:
     return entry_date
 
 
+def parse_time(value: object) -> str | None:
+    """Return HH:MM or None. Empty clears the time."""
+    if value is None:
+        return None
+    if not isinstance(value, str):
+        raise ValueError("time must be a string")
+    text = value.strip()
+    if not text:
+        return None
+    parts = text.split(":")
+    if len(parts) != 2:
+        raise ValueError("time must be HH:MM")
+    try:
+        hour = int(parts[0])
+        minute = int(parts[1])
+    except ValueError as exc:
+        raise ValueError("time must be HH:MM") from exc
+    if hour < 0 or hour > 23 or minute < 0 or minute > 59:
+        raise ValueError("time must be HH:MM")
+    return f"{hour:02d}:{minute:02d}"
+
+
+def normalize_notes(value: object) -> str:
+    if value is None:
+        return ""
+    if not isinstance(value, str):
+        raise ValueError("notes must be a string")
+    return value.strip()[:2000]
+
+
 def task_row(r: sqlite3.Row) -> dict:
     keys = r.keys()
     icon = r["icon"] if "icon" in keys else "general"
+    notes = r["notes"] if "notes" in keys else ""
+    start_time = r["start_time"] if "start_time" in keys else None
     return {
         "id": r["id"],
         "date": r["entry_date"],
@@ -238,6 +280,8 @@ def task_row(r: sqlite3.Row) -> dict:
         "sort_order": r["sort_order"],
         "created_at": r["created_at"],
         "icon": normalize_icon(icon),
+        "notes": notes or "",
+        "start_time": start_time,
     }
 
 
@@ -482,17 +526,51 @@ def delete_entry(entry_date: str):
     return jsonify({"ok": True, "date": entry_date})
 
 
+@app.get("/api/appointments")
+def list_appointments():
+    """Month grid of planned items (times, birthdays, appointments, etc.)."""
+    month = (request.args.get("month") or "").strip()
+    try:
+        year_s, month_s = month.split("-", 1)
+        year = int(year_s)
+        month_n = int(month_s)
+        if month_n < 1 or month_n > 12:
+            raise ValueError
+    except ValueError:
+        return jsonify({"error": "month must be YYYY-MM"}), 400
+
+    prefix = f"{year:04d}-{month_n:02d}-"
+    rows = get_db().execute(
+        f"""
+        SELECT {TASK_SELECT}
+        FROM tasks
+        WHERE entry_date LIKE ?
+        ORDER BY entry_date ASC,
+                 CASE WHEN start_time IS NULL OR start_time = '' THEN 1 ELSE 0 END,
+                 start_time ASC,
+                 sort_order ASC,
+                 id ASC
+        """,
+        (f"{prefix}%",),
+    ).fetchall()
+    return jsonify({"month": f"{year:04d}-{month_n:02d}", "appointments": [task_row(r) for r in rows]})
+
+
 @app.get("/api/tasks/<entry_date>")
 def list_tasks(entry_date: str):
     if parse_date(entry_date) is None:
         return jsonify({"error": "Invalid date"}), 400
 
     rows = get_db().execute(
-        """
-        SELECT id, entry_date, title, done, sort_order, created_at, icon
+        f"""
+        SELECT {TASK_SELECT}
         FROM tasks
         WHERE entry_date = ?
-        ORDER BY sort_order ASC, id ASC
+        ORDER BY
+            CASE WHEN start_time IS NULL OR start_time = '' THEN 1 ELSE 0 END,
+            start_time ASC,
+            sort_order ASC,
+            id ASC
         """,
         (entry_date,),
     ).fetchall()
@@ -511,6 +589,11 @@ def create_task(entry_date: str):
     if len(title) > 240:
         return jsonify({"error": "title is too long"}), 400
     icon = normalize_icon(payload.get("icon"))
+    try:
+        notes = normalize_notes(payload.get("notes", ""))
+        start_time = parse_time(payload.get("start_time"))
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
 
     db = get_db()
     max_order = db.execute(
@@ -520,14 +603,14 @@ def create_task(entry_date: str):
     now = utc_now()
     cur = db.execute(
         """
-        INSERT INTO tasks (entry_date, title, done, sort_order, created_at, icon)
-        VALUES (?, ?, 0, ?, ?, ?)
+        INSERT INTO tasks (entry_date, title, done, sort_order, created_at, icon, notes, start_time)
+        VALUES (?, ?, 0, ?, ?, ?, ?, ?)
         """,
-        (entry_date, title, int(max_order) + 1, now, icon),
+        (entry_date, title, int(max_order) + 1, now, icon, notes, start_time),
     )
     db.commit()
     row = db.execute(
-        "SELECT id, entry_date, title, done, sort_order, created_at, icon FROM tasks WHERE id = ?",
+        f"SELECT {TASK_SELECT} FROM tasks WHERE id = ?",
         (cur.lastrowid,),
     ).fetchone()
     return jsonify(task_row(row)), 201
@@ -537,7 +620,7 @@ def create_task(entry_date: str):
 def update_task(task_id: int):
     db = get_db()
     existing = db.execute(
-        "SELECT id, entry_date, title, done, sort_order, created_at, icon FROM tasks WHERE id = ?",
+        f"SELECT {TASK_SELECT} FROM tasks WHERE id = ?",
         (task_id,),
     ).fetchone()
     if existing is None:
@@ -546,7 +629,10 @@ def update_task(task_id: int):
     payload = request.get_json(silent=True) or {}
     title = existing["title"]
     done = existing["done"]
-    icon = normalize_icon(existing["icon"] if "icon" in existing.keys() else "general")
+    keys = existing.keys()
+    icon = normalize_icon(existing["icon"] if "icon" in keys else "general")
+    notes = existing["notes"] if "notes" in keys else ""
+    start_time = existing["start_time"] if "start_time" in keys else None
 
     if "title" in payload:
         if not isinstance(payload["title"], str):
@@ -563,13 +649,25 @@ def update_task(task_id: int):
     if "icon" in payload:
         icon = normalize_icon(payload["icon"])
 
+    try:
+        if "notes" in payload:
+            notes = normalize_notes(payload["notes"])
+        if "start_time" in payload:
+            start_time = parse_time(payload["start_time"])
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
+
     db.execute(
-        "UPDATE tasks SET title = ?, done = ?, icon = ? WHERE id = ?",
-        (title, done, icon, task_id),
+        """
+        UPDATE tasks
+        SET title = ?, done = ?, icon = ?, notes = ?, start_time = ?
+        WHERE id = ?
+        """,
+        (title, done, icon, notes, start_time, task_id),
     )
     db.commit()
     row = db.execute(
-        "SELECT id, entry_date, title, done, sort_order, created_at, icon FROM tasks WHERE id = ?",
+        f"SELECT {TASK_SELECT} FROM tasks WHERE id = ?",
         (task_id,),
     ).fetchone()
     return jsonify(task_row(row))

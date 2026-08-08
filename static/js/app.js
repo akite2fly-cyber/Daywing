@@ -321,29 +321,57 @@ const butterflyName = document.getElementById("butterfly-name");
 const taskList = document.getElementById("task-list");
 const taskForm = document.getElementById("task-form");
 const taskInput = document.getElementById("task-input");
+const taskTime = document.getElementById("task-time");
+const taskNotes = document.getElementById("task-notes");
 const iconPicker = document.getElementById("icon-picker");
+const appointmentsGrid = document.getElementById("appointments-grid");
 
 const PLAN_ICONS = [
-  { id: "general", label: "General", glyph: "✦" },
-  { id: "work", label: "Work", glyph: "briefcase" },
-  { id: "doctor", label: "Doctor", glyph: "plus" },
-  { id: "meeting", label: "Meeting", glyph: "people" },
-  { id: "home", label: "Home", glyph: "home" },
-  { id: "school", label: "School", glyph: "book" },
-  { id: "fitness", label: "Fitness", glyph: "bolt" },
-  { id: "shopping", label: "Shopping", glyph: "bag" },
-  { id: "travel", label: "Travel", glyph: "plane" },
-  { id: "call", label: "Call", glyph: "phone" },
-  { id: "bill", label: "Bills", glyph: "card" },
-  { id: "meal", label: "Meal", glyph: "fork" },
-  { id: "birthday", label: "Birthday", glyph: "gift" },
-  { id: "reminder", label: "Reminder", glyph: "bell" },
+  { id: "general", label: "General", glyph: "✦", detail: "Extra details…" },
+  { id: "work", label: "Work", glyph: "briefcase", detail: "Project, link, or notes…" },
+  { id: "doctor", label: "Doctor", glyph: "plus", detail: "Clinic, address, or prep notes…" },
+  { id: "meeting", label: "Meeting", glyph: "people", detail: "Where / agenda…" },
+  { id: "home", label: "Home", glyph: "home", detail: "What needs doing…" },
+  { id: "school", label: "School", glyph: "book", detail: "Class, assignment, or notes…" },
+  { id: "fitness", label: "Fitness", glyph: "bolt", detail: "Workout plan…" },
+  { id: "shopping", label: "Shopping", glyph: "bag", detail: "Store or list…" },
+  { id: "travel", label: "Travel", glyph: "plane", detail: "Flight, hotel, or destination…" },
+  { id: "call", label: "Call", glyph: "phone", detail: "Who to call / number…" },
+  { id: "bill", label: "Bills", glyph: "card", detail: "Account or amount…" },
+  { id: "meal", label: "Meal", glyph: "fork", detail: "Menu ideas or place…" },
+  { id: "birthday", label: "Birthday", glyph: "gift", detail: "Who is it for? Gift ideas…" },
+  { id: "reminder", label: "Reminder", glyph: "bell", detail: "What to remember…" },
 ];
 
 let selectedIcon = "general";
+let expandedTaskId = null;
+let monthAppointments = [];
 
 function iconMeta(id) {
   return PLAN_ICONS.find((item) => item.id === id) || PLAN_ICONS[0];
+}
+
+function syncDetailPlaceholder() {
+  if (!taskNotes) return;
+  taskNotes.placeholder = iconMeta(selectedIcon).detail;
+}
+
+function formatTimeLabel(value) {
+  if (!value) return "";
+  const [h, m] = value.split(":").map(Number);
+  if (!Number.isFinite(h) || !Number.isFinite(m)) return value;
+  const date = new Date();
+  date.setHours(h, m, 0, 0);
+  return date.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+}
+
+function formatShortDate(iso) {
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString(undefined, {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  });
 }
 
 function iconMarkup(glyphId, size = 18) {
@@ -395,10 +423,12 @@ function renderIconPicker() {
     btn.innerHTML = `${iconMarkup(item.glyph)}<span>${item.label}</span>`;
     btn.addEventListener("click", () => {
       selectedIcon = item.id;
+      syncDetailPlaceholder();
       renderIconPicker();
     });
     iconPicker.appendChild(btn);
   }
+  syncDetailPlaceholder();
 }
 
 const today = new Date();
@@ -828,7 +858,8 @@ function renderTasks() {
   for (const task of dayTasks) {
     const meta = iconMeta(task.icon || "general");
     const li = document.createElement("li");
-    li.className = `task-item${task.done ? " is-done" : ""}`;
+    const expanded = expandedTaskId === task.id;
+    li.className = `task-item${task.done ? " is-done" : ""}${expanded ? " is-expanded" : ""}`;
     li.dataset.id = String(task.id);
 
     const check = document.createElement("button");
@@ -843,9 +874,34 @@ function renderTasks() {
     icon.title = meta.label;
     icon.innerHTML = iconMarkup(meta.glyph);
 
+    const main = document.createElement("div");
+    main.className = "task-main";
+    if (task.start_time) {
+      const time = document.createElement("span");
+      time.className = "task-time-label";
+      time.textContent = formatTimeLabel(task.start_time);
+      main.appendChild(time);
+    }
     const title = document.createElement("span");
     title.className = "task-title";
     title.textContent = task.title;
+    main.appendChild(title);
+    if (task.notes) {
+      const preview = document.createElement("span");
+      preview.className = "task-notes-preview";
+      preview.textContent = task.notes;
+      main.appendChild(preview);
+    }
+
+    const edit = document.createElement("button");
+    edit.type = "button";
+    edit.className = "task-edit";
+    edit.setAttribute("aria-label", expanded ? "Close editor" : "Edit details");
+    edit.textContent = expanded ? "▾" : "✎";
+    edit.addEventListener("click", () => {
+      expandedTaskId = expanded ? null : task.id;
+      renderTasks();
+    });
 
     const remove = document.createElement("button");
     remove.type = "button";
@@ -854,8 +910,116 @@ function renderTasks() {
     remove.textContent = "×";
     remove.addEventListener("click", () => removeTask(task.id));
 
-    li.append(check, icon, title, remove);
+    li.append(check, icon, main, edit, remove);
+
+    if (expanded) {
+      const editor = document.createElement("div");
+      editor.className = "task-editor";
+
+      const row = document.createElement("div");
+      row.className = "task-editor-row";
+
+      const titleInput = document.createElement("input");
+      titleInput.type = "text";
+      titleInput.value = task.title;
+      titleInput.maxLength = 240;
+      titleInput.placeholder = "Title";
+
+      const timeInput = document.createElement("input");
+      timeInput.type = "time";
+      timeInput.value = task.start_time || "";
+      timeInput.title = "Appointment time";
+
+      row.append(titleInput, timeInput);
+
+      const notesInput = document.createElement("textarea");
+      notesInput.rows = 3;
+      notesInput.maxLength = 2000;
+      notesInput.value = task.notes || "";
+      notesInput.placeholder = meta.detail;
+
+      const save = document.createElement("button");
+      save.type = "button";
+      save.className = "task-editor-save";
+      save.textContent = "Save details";
+      save.addEventListener("click", async () => {
+        await updateTaskDetails(task.id, {
+          title: titleInput.value,
+          start_time: timeInput.value || null,
+          notes: notesInput.value,
+        });
+        expandedTaskId = null;
+      });
+
+      editor.append(row, notesInput, save);
+      li.appendChild(editor);
+    }
+
     taskList.appendChild(li);
+  }
+}
+
+function renderAppointments() {
+  if (!appointmentsGrid) return;
+  appointmentsGrid.innerHTML = "";
+  if (!monthAppointments.length) {
+    const empty = document.createElement("p");
+    empty.className = "appointments-empty";
+    empty.textContent = "No appointments or plans this month yet.";
+    appointmentsGrid.appendChild(empty);
+    return;
+  }
+
+  for (const item of monthAppointments) {
+    const meta = iconMeta(item.icon || "general");
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = `appointment-row${item.done ? " is-done" : ""}`;
+    btn.addEventListener("click", () => openDay(item.date));
+
+    const date = document.createElement("span");
+    date.className = "appointment-date";
+    date.textContent = formatShortDate(item.date);
+
+    const time = document.createElement("span");
+    time.className = "appointment-time";
+    time.textContent = item.start_time ? formatTimeLabel(item.start_time) : "—";
+
+    const icon = document.createElement("span");
+    icon.className = "appointment-icon";
+    icon.title = meta.label;
+    icon.innerHTML = iconMarkup(meta.glyph, 16);
+
+    const body = document.createElement("span");
+    body.className = "appointment-body";
+    const title = document.createElement("span");
+    title.className = "appointment-title";
+    title.textContent = item.title;
+    body.appendChild(title);
+    if (item.notes) {
+      const notes = document.createElement("span");
+      notes.className = "appointment-notes";
+      notes.textContent = item.notes;
+      body.appendChild(notes);
+    }
+
+    btn.append(date, time, icon, body);
+    appointmentsGrid.appendChild(btn);
+  }
+}
+
+async function loadAppointments() {
+  monthAppointments = [];
+  renderAppointments();
+  const key = `${viewYear}-${pad(viewMonth + 1)}`;
+  try {
+    const res = await fetch(`/api/appointments?month=${key}`);
+    if (!res.ok) return;
+    const data = await res.json();
+    monthAppointments = data.appointments || [];
+    renderAppointments();
+  } catch (_) {
+    /* keep empty */
   }
 }
 
@@ -881,14 +1045,26 @@ async function addTask(title) {
     const res = await fetch(`/api/tasks/${selectedDate}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: title.trim(), icon: selectedIcon }),
+      body: JSON.stringify({
+        title: title.trim(),
+        icon: selectedIcon,
+        start_time: taskTime?.value || null,
+        notes: taskNotes?.value || "",
+      }),
     });
     if (!res.ok) throw new Error("add failed");
     const task = await res.json();
     dayTasks.push(task);
+    dayTasks.sort((a, b) => {
+      const at = a.start_time || "99:99";
+      const bt = b.start_time || "99:99";
+      if (at !== bt) return at.localeCompare(bt);
+      return (a.sort_order || 0) - (b.sort_order || 0);
+    });
     syncDayIconsFromTasks(selectedDate, dayTasks);
     renderTasks();
     renderCalendar();
+    await loadAppointments();
   } catch (_) {
     saveStatus.textContent = "Could not add plan.";
   }
@@ -905,8 +1081,34 @@ async function toggleTask(id, done) {
     const updated = await res.json();
     dayTasks = dayTasks.map((t) => (t.id === id ? updated : t));
     renderTasks();
+    await loadAppointments();
   } catch (_) {
     saveStatus.textContent = "Could not update plan.";
+  }
+}
+
+async function updateTaskDetails(id, fields) {
+  try {
+    const res = await fetch(`/api/tasks/item/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(fields),
+    });
+    if (!res.ok) throw new Error("update failed");
+    const updated = await res.json();
+    dayTasks = dayTasks.map((t) => (t.id === id ? updated : t));
+    dayTasks.sort((a, b) => {
+      const at = a.start_time || "99:99";
+      const bt = b.start_time || "99:99";
+      if (at !== bt) return at.localeCompare(bt);
+      return (a.sort_order || 0) - (b.sort_order || 0);
+    });
+    if (selectedDate) syncDayIconsFromTasks(selectedDate, dayTasks);
+    renderTasks();
+    renderCalendar();
+    await loadAppointments();
+  } catch (_) {
+    saveStatus.textContent = "Could not save details.";
   }
 }
 
@@ -915,16 +1117,18 @@ async function removeTask(id) {
     const res = await fetch(`/api/tasks/item/${id}`, { method: "DELETE" });
     if (!res.ok) throw new Error("delete failed");
     dayTasks = dayTasks.filter((t) => t.id !== id);
+    if (expandedTaskId === id) expandedTaskId = null;
     if (selectedDate) syncDayIconsFromTasks(selectedDate, dayTasks);
     renderTasks();
     renderCalendar();
+    await loadAppointments();
   } catch (_) {
     saveStatus.textContent = "Could not remove plan.";
   }
 }
 
 async function refreshCalendar() {
-  await loadMonthMarkers();
+  await Promise.all([loadMonthMarkers(), loadAppointments()]);
   renderCalendar();
 }
 
@@ -948,8 +1152,12 @@ async function openDay(iso) {
   dayTasks = [];
   renderTasks();
   selectedIcon = "general";
+  expandedTaskId = null;
   renderIconPicker();
   taskInput.value = "";
+  if (taskTime) taskTime.value = "";
+  if (taskNotes) taskNotes.value = "";
+  syncDetailPlaceholder();
 
   overlay.hidden = false;
   overlay.classList.remove("is-open", "is-revealing", "is-quoting", "is-sheet");
@@ -1048,6 +1256,9 @@ taskForm.addEventListener("submit", async (e) => {
   const title = taskInput.value;
   taskInput.value = "";
   await addTask(title);
+  if (taskTime) taskTime.value = "";
+  if (taskNotes) taskNotes.value = "";
+  syncDetailPlaceholder();
   taskInput.focus();
 });
 
