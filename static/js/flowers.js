@@ -239,7 +239,7 @@
     if (!host) return;
     clear(host);
     const placements = [
-      { type: pick(TYPES, seed), cls: "deco-flower--sheet-tl", pal: pick(PALETTES, seed + 1) },
+      { type: pick(TYPES, seed), cls: "deco-flower--sheet-tr", pal: pick(PALETTES, seed + 1) },
       { type: pick(TYPES, seed + 3), cls: "deco-flower--sheet-br", pal: pick(PALETTES, seed + 3) },
     ];
     for (const item of placements) {

@@ -59,23 +59,107 @@
       </section>
     </main>
 
-    <!-- Day open overlay: butterfly + quote + journal -->
+    <!-- Day open overlay: meadow presence + butterfly + quote + journal -->
     <div class="day-overlay" id="day-overlay" hidden>
       <div class="overlay-backdrop" id="overlay-backdrop"></div>
+      <div class="meadow-scene" id="meadow-scene" aria-hidden="true">
+        <img
+          class="meadow-photo"
+          src="/static/meadow/meadow-day.jpg"
+          alt=""
+          decoding="async"
+        />
+        <div class="distant-butterflies" aria-hidden="true">
+          <svg class="distant-bf distant-bf--a" viewBox="0 0 32 24" aria-hidden="true">
+            <g class="distant-bf__wings">
+              <path
+                d="M16 12 C11 3 3 4 4 10.5 C5 15 10 15 16 12 C22 15 27 15 28 10.5 C29 4 21 3 16 12 Z"
+              />
+            </g>
+            <ellipse class="distant-bf__body" cx="16" cy="12" rx="1.1" ry="4.2" />
+          </svg>
+          <svg class="distant-bf distant-bf--b" viewBox="0 0 32 24" aria-hidden="true">
+            <g class="distant-bf__wings">
+              <path
+                d="M16 12 C11 3 3 4 4 10.5 C5 15 10 15 16 12 C22 15 27 15 28 10.5 C29 4 21 3 16 12 Z"
+              />
+            </g>
+            <ellipse class="distant-bf__body" cx="16" cy="12" rx="1.1" ry="4.2" />
+          </svg>
+          <svg class="distant-bf distant-bf--c" viewBox="0 0 32 24" aria-hidden="true">
+            <g class="distant-bf__wings">
+              <path
+                d="M16 12 C11 3 3 4 4 10.5 C5 15 10 15 16 12 C22 15 27 15 28 10.5 C29 4 21 3 16 12 Z"
+              />
+            </g>
+            <ellipse class="distant-bf__body" cx="16" cy="12" rx="1.1" ry="4.2" />
+          </svg>
+          <svg class="distant-bf distant-bf--d" viewBox="0 0 32 24" aria-hidden="true">
+            <g class="distant-bf__wings">
+              <path
+                d="M16 12 C11 3 3 4 4 10.5 C5 15 10 15 16 12 C22 15 27 15 28 10.5 C29 4 21 3 16 12 Z"
+              />
+            </g>
+            <ellipse class="distant-bf__body" cx="16" cy="12" rx="1.1" ry="4.2" />
+          </svg>
+          <svg class="distant-bf distant-bf--e" viewBox="0 0 32 24" aria-hidden="true">
+            <g class="distant-bf__wings">
+              <path
+                d="M16 12 C11 3 3 4 4 10.5 C5 15 10 15 16 12 C22 15 27 15 28 10.5 C29 4 21 3 16 12 Z"
+              />
+            </g>
+            <ellipse class="distant-bf__body" cx="16" cy="12" rx="1.1" ry="4.2" />
+          </svg>
+        </div>
+        <div class="meadow-veil"></div>
+        <div class="meadow-grass" aria-hidden="true">
+          <img class="grass-sway grass-sway--l" src="/static/meadow/grass-l.png" alt="" decoding="async" />
+          <img class="grass-sway grass-sway--c" src="/static/meadow/grass-c.png" alt="" decoding="async" />
+          <img class="grass-sway grass-sway--r" src="/static/meadow/grass-r.png" alt="" decoding="async" />
+          <img class="grass-sway grass-sway--l2" src="/static/meadow/grass-l.png" alt="" decoding="async" />
+          <img class="grass-sway grass-sway--r2" src="/static/meadow/grass-r.png" alt="" decoding="async" />
+          <svg class="grass-blades" viewBox="0 0 400 160" preserveAspectRatio="none" aria-hidden="true">
+            <g class="blade-group blade-group--a">
+              <path d="M28 160 C26 110 18 70 22 18" />
+              <path d="M40 160 C42 105 48 62 55 12" />
+              <path d="M52 160 C50 112 44 74 40 28" />
+              <path d="M66 160 C70 108 78 58 86 8" />
+            </g>
+            <g class="blade-group blade-group--b">
+              <path d="M118 160 C114 108 104 66 98 14" />
+              <path d="M132 160 C136 100 146 55 154 6" />
+              <path d="M148 160 C146 112 140 72 136 22" />
+              <path d="M168 160 C174 106 186 52 196 4" />
+            </g>
+            <g class="blade-group blade-group--c">
+              <path d="M230 160 C226 110 216 68 210 16" />
+              <path d="M246 160 C250 102 260 58 270 10" />
+              <path d="M262 160 C260 114 254 76 250 30" />
+              <path d="M284 160 C290 108 302 54 312 6" />
+            </g>
+            <g class="blade-group blade-group--d">
+              <path d="M330 160 C326 112 318 70 314 18" />
+              <path d="M344 160 C348 104 356 60 364 12" />
+              <path d="M358 160 C356 116 350 78 346 32" />
+              <path d="M376 160 C382 110 392 56 398 8" />
+            </g>
+          </svg>
+        </div>
+      </div>
 
       <div class="reveal-stage" id="reveal-stage" aria-live="polite">
         <div class="butterfly-host" id="butterfly-host" aria-hidden="true"></div>
-        <p class="butterfly-name" id="butterfly-name"></p>
-
-        <blockquote class="quote" id="day-quote">
-          <p class="quote-text"></p>
-          <cite class="quote-author"></cite>
-        </blockquote>
-
-        <p class="kindness-idea" id="kindness-idea">
-          <span class="kindness-label">A kindness idea</span>
-          <span class="kindness-text"></span>
-        </p>
+        <div class="meadow-copy">
+          <p class="butterfly-name" id="butterfly-name"></p>
+          <blockquote class="quote" id="day-quote">
+            <p class="quote-text"></p>
+            <cite class="quote-author"></cite>
+          </blockquote>
+          <p class="kindness-idea" id="kindness-idea">
+            <span class="kindness-label">A kindness idea</span>
+            <span class="kindness-text"></span>
+          </p>
+        </div>
       </div>
 
       <article class="journal-sheet" id="journal-sheet" role="dialog" aria-modal="true" aria-labelledby="journal-date">
@@ -145,13 +229,30 @@
             <h3>Journal</h3>
             <p class="section-hint">Thoughts from this day</p>
           </div>
-          <label class="sr-only" for="journal-body">Today's entry</label>
-          <textarea
-            id="journal-body"
-            class="journal-body"
-            placeholder="Write what this day held…"
-            rows="8"
-          ></textarea>
+          <div class="journal-compose">
+            <label class="sr-only" for="journal-body">Today's entry</label>
+            <textarea
+              id="journal-body"
+              class="journal-body"
+              placeholder="Write what this day held…"
+              rows="8"
+            ></textarea>
+            <button
+              type="button"
+              class="dictation-btn"
+              id="dictation-btn"
+              aria-pressed="false"
+              aria-label="Dictate journal entry"
+              title="Dictate"
+            >
+              <svg class="dictation-btn__icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2Z"
+                />
+              </svg>
+            </button>
+          </div>
+          <p class="dictation-status" id="dictation-status" aria-live="polite"></p>
         </section>
 
         <footer class="journal-footer">
@@ -161,7 +262,9 @@
       </article>
     </div>
 
+    <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
     <script src="/static/js/flowers.js"></script>
+    <script src="/static/js/butterfly3d.js"></script>
     <script src="/static/js/app.js"></script>
   </body>
 </html>

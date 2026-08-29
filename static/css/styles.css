@@ -77,13 +77,13 @@ body {
 }
 
 .deco-flower--tl {
-  top: 4.5rem;
+  top: 6.5rem;
   left: 1.2rem;
   animation-delay: 0s;
 }
 
 .deco-flower--tr {
-  top: 6rem;
+  top: 8rem;
   right: 1.4rem;
   width: 82px;
   height: 82px;
@@ -131,11 +131,11 @@ body {
   border-radius: inherit;
 }
 
-.deco-flower--sheet-tl {
-  top: 0.45rem;
-  left: 0.35rem;
-  width: 64px;
-  height: 64px;
+.deco-flower--sheet-tr {
+  top: 0.55rem;
+  right: 3.15rem;
+  width: 58px;
+  height: 58px;
   opacity: 0.55;
 }
 
@@ -166,7 +166,7 @@ body {
 
 .site-header {
   text-align: center;
-  padding: calc(4.5rem + env(safe-area-inset-top)) 1.25rem 0.75rem;
+  padding: calc(6.25rem + env(safe-area-inset-top)) 1.25rem 1rem;
 }
 
 .brand {
@@ -438,22 +438,28 @@ body {
   background: rgba(47, 111, 94, 0.16);
 }
 
-/* Overlay + reveal */
+/* Overlay + meadow presence reveal */
 .day-overlay {
   position: fixed;
   inset: 0;
   z-index: 40;
   display: grid;
-  place-items: center;
-  padding: 1rem;
-  overflow-y: auto;
+  place-items: stretch;
+  padding: 0;
+  overflow: hidden;
+}
+
+.day-overlay.is-open:not(.is-sheet) {
+  place-items: stretch;
 }
 
 .day-overlay.is-sheet {
   place-items: start center;
   align-content: start;
+  padding: 1rem;
   padding-top: max(0.75rem, env(safe-area-inset-top));
   padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  overflow-y: auto;
 }
 
 .day-overlay.is-sheet .reveal-stage {
@@ -464,6 +470,10 @@ body {
   pointer-events: none;
 }
 
+.day-overlay.is-sheet .meadow-scene {
+  animation: meadow-fade-out 700ms ease forwards;
+}
+
 .day-overlay[hidden] {
   display: none;
 }
@@ -471,47 +481,679 @@ body {
 .overlay-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(20, 36, 32, 0.42);
-  backdrop-filter: blur(6px);
+  background: rgba(18, 32, 28, 0.28);
+  backdrop-filter: blur(10px);
   opacity: 0;
-  transition: opacity 350ms ease;
+  transition: opacity 450ms ease;
 }
 
 .day-overlay.is-open .overlay-backdrop {
   opacity: 1;
 }
 
+/* Full-bleed photoreal meadow — you are standing here */
+.meadow-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.day-overlay.is-open .meadow-scene {
+  opacity: 1;
+  animation: meadow-scene-in 900ms ease forwards;
+}
+
+.day-overlay.is-open.is-sheet .meadow-scene {
+  animation: meadow-fade-out 700ms ease forwards;
+}
+
+@keyframes meadow-scene-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.meadow-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 45%;
+  display: block;
+}
+
+/* Far-field silhouettes — depth, not the star of the reveal */
+.distant-butterflies {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.distant-bf {
+  position: absolute;
+  width: 18px;
+  height: auto;
+  fill: rgba(28, 42, 30, 0.4);
+  opacity: 0;
+  filter: blur(0.3px);
+  will-change: transform, opacity;
+}
+
+.distant-bf--a {
+  top: 32%;
+  left: 14%;
+  width: 17px;
+}
+
+.distant-bf--b {
+  top: 39%;
+  left: 66%;
+  width: 20px;
+  fill: rgba(22, 36, 28, 0.34);
+}
+
+.distant-bf--c {
+  top: 28%;
+  left: 42%;
+  width: 15px;
+  fill: rgba(30, 44, 32, 0.38);
+}
+
+.distant-bf--d {
+  top: 46%;
+  left: 8%;
+  width: 22px;
+  fill: rgba(24, 38, 28, 0.36);
+}
+
+.distant-bf--e {
+  top: 35%;
+  left: 82%;
+  width: 16px;
+  fill: rgba(26, 40, 30, 0.32);
+}
+
+.distant-bf__wings {
+  transform-origin: 16px 12px;
+}
+
+.day-overlay.is-open:not(.is-sheet) .distant-bf--a {
+  animation:
+    distant-bf-drift-a 18s ease-in-out infinite,
+    distant-bf-fade 2.4s ease forwards;
+}
+
+.day-overlay.is-open:not(.is-sheet) .distant-bf--b {
+  animation:
+    distant-bf-drift-b 22s ease-in-out 1.2s infinite,
+    distant-bf-fade 2.8s 0.6s ease forwards;
+}
+
+.day-overlay.is-open:not(.is-sheet) .distant-bf--c {
+  animation:
+    distant-bf-drift-c 20s ease-in-out 0.4s infinite,
+    distant-bf-fade 2.5s 0.3s ease forwards;
+}
+
+.day-overlay.is-open:not(.is-sheet) .distant-bf--d {
+  animation:
+    distant-bf-drift-d 16s ease-in-out 1.8s infinite,
+    distant-bf-fade 3s 0.9s ease forwards;
+}
+
+.day-overlay.is-open:not(.is-sheet) .distant-bf--e {
+  animation:
+    distant-bf-drift-e 24s ease-in-out 0.8s infinite,
+    distant-bf-fade 2.6s 1.1s ease forwards;
+}
+
+.day-overlay.is-open:not(.is-sheet) .distant-bf--a .distant-bf__wings {
+  animation: distant-bf-flap 0.55s ease-in-out infinite alternate;
+}
+
+.day-overlay.is-open:not(.is-sheet) .distant-bf--b .distant-bf__wings {
+  animation: distant-bf-flap 0.48s ease-in-out 0.2s infinite alternate;
+}
+
+.day-overlay.is-open:not(.is-sheet) .distant-bf--c .distant-bf__wings {
+  animation: distant-bf-flap 0.62s ease-in-out 0.1s infinite alternate;
+}
+
+.day-overlay.is-open:not(.is-sheet) .distant-bf--d .distant-bf__wings {
+  animation: distant-bf-flap 0.44s ease-in-out 0.35s infinite alternate;
+}
+
+.day-overlay.is-open:not(.is-sheet) .distant-bf--e .distant-bf__wings {
+  animation: distant-bf-flap 0.58s ease-in-out 0.15s infinite alternate;
+}
+
+.day-overlay.is-sheet .distant-bf {
+  animation: none;
+  opacity: 0;
+}
+
+@keyframes distant-bf-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes distant-bf-flap {
+  from {
+    transform: scaleX(1) scaleY(1);
+  }
+  to {
+    transform: scaleX(0.55) scaleY(1.05);
+  }
+}
+
+@keyframes distant-bf-drift-a {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(-8deg);
+  }
+  35% {
+    transform: translate3d(14vw, -3vh, 0) rotate(6deg);
+  }
+  70% {
+    transform: translate3d(28vw, 2vh, 0) rotate(-4deg);
+  }
+  100% {
+    transform: translate3d(40vw, -1vh, 0) rotate(5deg);
+  }
+}
+
+@keyframes distant-bf-drift-b {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(10deg);
+  }
+  40% {
+    transform: translate3d(-12vw, -4vh, 0) rotate(-6deg);
+  }
+  75% {
+    transform: translate3d(-26vw, 1vh, 0) rotate(8deg);
+  }
+  100% {
+    transform: translate3d(-38vw, -2vh, 0) rotate(-3deg);
+  }
+}
+
+@keyframes distant-bf-drift-c {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(-4deg);
+  }
+  30% {
+    transform: translate3d(8vw, 3vh, 0) rotate(7deg);
+  }
+  65% {
+    transform: translate3d(-6vw, -2vh, 0) rotate(-5deg);
+  }
+  100% {
+    transform: translate3d(12vw, 1vh, 0) rotate(4deg);
+  }
+}
+
+@keyframes distant-bf-drift-d {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(6deg);
+  }
+  40% {
+    transform: translate3d(18vw, -5vh, 0) rotate(-8deg);
+  }
+  100% {
+    transform: translate3d(32vw, -1vh, 0) rotate(5deg);
+  }
+}
+
+@keyframes distant-bf-drift-e {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(-10deg);
+  }
+  45% {
+    transform: translate3d(-16vw, 3vh, 0) rotate(5deg);
+  }
+  100% {
+    transform: translate3d(-30vw, -2vh, 0) rotate(-6deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .day-overlay.is-open:not(.is-sheet) .distant-bf {
+    animation: distant-bf-fade 2s ease forwards;
+    opacity: 1;
+  }
+
+  .day-overlay.is-open:not(.is-sheet) .distant-bf .distant-bf__wings {
+    animation: none;
+  }
+}
+
+.meadow-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(20, 36, 32, 0.18) 0%,
+      rgba(20, 36, 32, 0.04) 28%,
+      rgba(20, 36, 32, 0.06) 58%,
+      rgba(12, 24, 20, 0.34) 100%
+    );
+  pointer-events: none;
+}
+
+/* Near grasses — photo stays still; these carry the breeze */
+.meadow-grass {
+  position: absolute;
+  left: -3%;
+  right: -3%;
+  bottom: 0;
+  height: min(42vh, 320px);
+  z-index: 3;
+  pointer-events: none;
+  overflow: visible;
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.7) 18%,
+    #000 48%,
+    #000 88%,
+    rgba(0, 0, 0, 0.35) 100%
+  );
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.7) 18%,
+    #000 48%,
+    #000 88%,
+    rgba(0, 0, 0, 0.35) 100%
+  );
+}
+
+.grass-sway {
+  position: absolute;
+  bottom: -6%;
+  height: 115%;
+  width: auto;
+  max-width: none;
+  object-fit: contain;
+  object-position: bottom center;
+  transform-origin: 50% 100%;
+  will-change: transform;
+  mix-blend-mode: multiply;
+}
+
+.grass-sway--l {
+  left: -8%;
+  height: 122%;
+  opacity: 0.78;
+  filter:
+    saturate(0.68)
+    brightness(0.88)
+    contrast(0.92)
+    sepia(0.22)
+    hue-rotate(-12deg)
+    blur(0.45px);
+}
+
+.grass-sway--c {
+  left: 24%;
+  height: 110%;
+  opacity: 0.64;
+  filter:
+    saturate(0.62)
+    brightness(0.86)
+    contrast(0.9)
+    sepia(0.24)
+    hue-rotate(-10deg)
+    blur(0.7px);
+}
+
+.grass-sway--r {
+  right: -8%;
+  left: auto;
+  height: 126%;
+  opacity: 0.8;
+  filter:
+    saturate(0.7)
+    brightness(0.9)
+    contrast(0.92)
+    sepia(0.2)
+    hue-rotate(-12deg)
+    blur(0.4px);
+}
+
+.grass-sway--l2 {
+  left: 8%;
+  height: 98%;
+  opacity: 0.55;
+  filter:
+    saturate(0.58)
+    brightness(0.82)
+    contrast(0.88)
+    sepia(0.28)
+    hue-rotate(-14deg)
+    blur(1px);
+}
+
+.grass-sway--r2 {
+  right: 10%;
+  left: auto;
+  height: 102%;
+  opacity: 0.58;
+  filter:
+    saturate(0.6)
+    brightness(0.84)
+    contrast(0.9)
+    sepia(0.26)
+    hue-rotate(-11deg)
+    blur(0.9px);
+}
+
+.grass-blades {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 72%;
+  overflow: visible;
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.grass-blades path {
+  fill: none;
+  stroke: #3f5e3a;
+  stroke-width: 1.35;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+
+.blade-group {
+  transform-origin: 50% 100%;
+  transform-box: fill-box;
+  will-change: transform;
+}
+
+.day-overlay.is-open:not(.is-sheet) .grass-sway--l {
+  animation: grass-sway-strong 3.6s ease-in-out infinite alternate;
+}
+
+.day-overlay.is-open:not(.is-sheet) .grass-sway--c {
+  animation: grass-sway-mid 4.4s ease-in-out 0.25s infinite alternate-reverse;
+}
+
+.day-overlay.is-open:not(.is-sheet) .grass-sway--r {
+  animation: grass-sway-strong 3.2s ease-in-out 0.55s infinite alternate;
+}
+
+.day-overlay.is-open:not(.is-sheet) .grass-sway--l2 {
+  animation: grass-sway-mid 5s ease-in-out 0.8s infinite alternate;
+}
+
+.day-overlay.is-open:not(.is-sheet) .grass-sway--r2 {
+  animation: grass-sway-strong 3.9s ease-in-out 1.1s infinite alternate-reverse;
+}
+
+.day-overlay.is-open:not(.is-sheet) .blade-group--a {
+  animation: blade-sway 2.6s ease-in-out infinite alternate;
+}
+
+.day-overlay.is-open:not(.is-sheet) .blade-group--b {
+  animation: blade-sway 3.1s ease-in-out 0.35s infinite alternate-reverse;
+}
+
+.day-overlay.is-open:not(.is-sheet) .blade-group--c {
+  animation: blade-sway 2.4s ease-in-out 0.7s infinite alternate;
+}
+
+.day-overlay.is-open:not(.is-sheet) .blade-group--d {
+  animation: blade-sway 2.9s ease-in-out 1s infinite alternate-reverse;
+}
+
+.day-overlay.is-sheet .grass-sway,
+.day-overlay.is-sheet .blade-group {
+  animation: none;
+}
+
+@keyframes grass-sway-strong {
+  0% {
+    transform: rotate(-5.5deg) skewX(-2.4deg) translateX(-1.2%);
+  }
+  100% {
+    transform: rotate(6.2deg) skewX(2.8deg) translateX(1.4%);
+  }
+}
+
+@keyframes grass-sway-mid {
+  0% {
+    transform: rotate(-3.8deg) skewX(-1.6deg) translateX(-0.6%);
+  }
+  100% {
+    transform: rotate(4.4deg) skewX(1.9deg) translateX(0.8%);
+  }
+}
+
+@keyframes blade-sway {
+  0% {
+    transform: rotate(-7deg) skewX(-3deg);
+  }
+  100% {
+    transform: rotate(8deg) skewX(3.5deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .day-overlay.is-open:not(.is-sheet) .grass-sway--l,
+  .day-overlay.is-open:not(.is-sheet) .grass-sway--c,
+  .day-overlay.is-open:not(.is-sheet) .grass-sway--r,
+  .day-overlay.is-open:not(.is-sheet) .grass-sway--l2,
+  .day-overlay.is-open:not(.is-sheet) .grass-sway--r2,
+  .day-overlay.is-open:not(.is-sheet) .blade-group--a,
+  .day-overlay.is-open:not(.is-sheet) .blade-group--b,
+  .day-overlay.is-open:not(.is-sheet) .blade-group--c,
+  .day-overlay.is-open:not(.is-sheet) .blade-group--d {
+    animation: none;
+  }
+}
+
+@keyframes meadow-fade-out {
+  to {
+    opacity: 0;
+    transform: scale(1.02);
+  }
+}
+
 .reveal-stage {
   position: relative;
   z-index: 2;
-  width: min(480px, 100%);
-  min-height: 220px;
+  width: 100%;
+  height: 100%;
+  min-height: 100dvh;
   display: grid;
-  place-items: center;
+  place-items: stretch;
   pointer-events: none;
+}
+
+.day-overlay.is-sheet .reveal-stage {
+  min-height: 0;
+  height: fit-content;
 }
 
 .butterfly-host {
   display: grid;
   place-items: center;
-  min-height: 110px;
+  min-height: 140px;
   opacity: 0;
-  transform: translate(-28vw, 18vh) rotate(-12deg) scale(0.55);
+  transform: translate(-32vw, 22vh) rotate(-14deg) scale(0.42);
 }
 
 .day-overlay.is-revealing .butterfly-host {
-  animation: butterfly-flight var(--flight-duration, 2.4s) cubic-bezier(0.33, 0.2, 0.25, 1) forwards;
+  animation: butterfly-flight var(--flight-duration, 2.8s) cubic-bezier(0.33, 0.2, 0.25, 1) forwards;
 }
 
-.day-overlay.is-sheet .butterfly-host {
-  animation: host-fade-out 500ms ease forwards;
+.butterfly-host--3d {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  margin: 0;
+  opacity: 1;
+  transform: none;
+  animation: none !important;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.butterfly-host--3d .bf3d-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.day-overlay.is-sheet .butterfly-host--3d {
+  animation: host-fade-out 800ms ease 200ms forwards !important;
+}
+
+/* Quiet words rising in the meadow after the landing */
+.meadow-copy {
+  position: absolute;
+  left: 50%;
+  bottom: max(1.75rem, calc(1.1rem + env(safe-area-inset-bottom)));
+  transform: translateX(-50%);
+  width: min(34rem, calc(100% - 2rem));
+  z-index: 3;
+  display: grid;
+  gap: 0.65rem;
+  justify-items: center;
+  text-align: center;
+  padding: 1.15rem 1.25rem 1.25rem;
+  border-radius: 18px;
+  background: linear-gradient(
+    180deg,
+    rgba(18, 32, 28, 0.18) 0%,
+    rgba(14, 26, 22, 0.5) 100%
+  );
+  backdrop-filter: blur(8px);
+  box-shadow: 0 16px 40px rgba(8, 16, 12, 0.22);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.day-overlay.is-quoting:not(.is-sheet) .meadow-copy {
+  animation: meadow-copy-in 900ms 80ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.day-overlay.is-sheet .meadow-copy {
+  animation: fade-out-soft 450ms ease forwards;
+}
+
+@keyframes meadow-copy-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes fade-out-soft {
+  to {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.96);
+  }
+}
+
+@keyframes quote-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bf-flight {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(72vw, 280px);
+  isolation: isolate;
+}
+
+.bf-flight--sheet {
+  width: 100%;
+  max-width: 64px;
+}
+
+.bf-shadow {
+  position: absolute;
+  left: 50%;
+  bottom: 2%;
+  z-index: 0;
+  width: 58%;
+  height: 14%;
+  transform: translateX(-50%) scale(1);
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(18, 28, 24, 0.42) 0%,
+    rgba(18, 28, 24, 0.18) 42%,
+    rgba(18, 28, 24, 0) 72%
+  );
+  filter: blur(5px);
+  pointer-events: none;
 }
 
 .butterfly {
-  width: 120px;
+  width: 132px;
   height: auto;
   transform-origin: center center;
-  filter: drop-shadow(0 10px 16px rgba(47, 111, 94, 0.25));
+  filter: drop-shadow(0 8px 14px rgba(30, 61, 50, 0.22));
+}
+
+.butterfly--watercolor {
+  width: 168px;
+  filter: drop-shadow(0 12px 22px rgba(26, 46, 40, 0.3));
+}
+
+.butterfly--photo,
+img.butterfly-photo {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: auto;
+  max-height: 46vh;
+  object-fit: contain;
+  background: transparent;
+  filter: none;
+  pointer-events: none;
+  user-select: none;
+  transform-origin: 50% 55%;
+}
+
+.butterfly--sheet.butterfly--photo,
+.butterfly--sheet img.butterfly-photo,
+.bf-flight--sheet img.butterfly-photo {
+  width: 58px !important;
+  max-width: 58px;
+  max-height: 52px;
+  height: auto;
 }
 
 .butterfly--fancy {
@@ -520,32 +1162,49 @@ body {
 }
 
 .butterfly-name {
-  margin: 0.35rem 0 0;
+  margin: 0;
   text-align: center;
   font-family: var(--font-body);
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(247, 251, 247, 0.9);
-  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.35);
-  opacity: 0;
+  color: rgba(247, 251, 247, 0.82);
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
+  opacity: 1;
 }
 
 .day-overlay.is-revealing .butterfly-name {
-  animation: quote-in 500ms 200ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: none;
+  opacity: 1;
 }
 
 .day-overlay.is-sheet .butterfly-name {
-  animation: fade-out-soft 400ms ease forwards;
+  animation: none;
 }
 
-.day-overlay.is-revealing .butterfly {
-  animation: butterfly-bob 2.4s ease-in-out infinite;
+/* Photo butterfly: wing-beat + lift while flying in */
+.day-overlay.is-revealing .bf-flight:not(.bf-flight--sheet) .butterfly--photo {
+  animation: photo-wingbeat 0.28s ease-in-out infinite alternate;
 }
 
-.day-overlay.is-quoting:not(.is-sheet) .butterfly {
-  animation: butterfly-hover-dance 4s ease-in-out infinite;
+.day-overlay.is-revealing .bf-flight:not(.bf-flight--sheet) .bf-shadow {
+  animation: shadow-chase-flight var(--flight-duration, 2.8s) cubic-bezier(0.33, 0.2, 0.25, 1) forwards;
+}
+
+.day-overlay.is-quoting:not(.is-sheet) .bf-flight:not(.bf-flight--sheet) .butterfly--photo {
+  animation: photo-hover-flap 0.55s ease-in-out infinite alternate;
+}
+
+.day-overlay.is-quoting:not(.is-sheet) .bf-flight:not(.bf-flight--sheet) .bf-shadow {
+  animation: shadow-chase-hover 2.4s ease-in-out infinite;
+}
+
+.day-overlay.is-sheet .bf-flight--sheet .bf-shadow {
+  width: 48%;
+  height: 10%;
+  bottom: 4%;
+  opacity: 0.55;
 }
 
 .wing-left,
@@ -615,6 +1274,61 @@ body {
   }
 }
 
+@keyframes photo-wingbeat {
+  from {
+    transform: translateY(0) scaleX(1) scaleY(1) rotate(-2deg);
+  }
+  to {
+    transform: translateY(-10px) scaleX(0.86) scaleY(1.04) rotate(3deg);
+  }
+}
+
+@keyframes photo-hover-flap {
+  from {
+    transform: translateY(0) scaleX(1) rotate(-1deg);
+  }
+  to {
+    transform: translateY(-8px) scaleX(0.9) rotate(2deg);
+  }
+}
+
+@keyframes shadow-chase-flight {
+  0% {
+    opacity: 0.15;
+    transform: translateX(-50%) translate(18px, 18px) scale(1.35, 0.7);
+    filter: blur(7px);
+  }
+  45% {
+    opacity: 0.28;
+    transform: translateX(-50%) translate(-6px, 10px) scale(0.75, 0.55);
+    filter: blur(8px);
+  }
+  70% {
+    opacity: 0.4;
+    transform: translateX(-50%) translate(2px, 4px) scale(0.95, 0.7);
+    filter: blur(5px);
+  }
+  100% {
+    opacity: 0.5;
+    transform: translateX(-50%) translate(0, 0) scale(1, 0.85);
+    filter: blur(5px);
+  }
+}
+
+@keyframes shadow-chase-hover {
+  0%,
+  100% {
+    opacity: 0.48;
+    transform: translateX(-50%) translate(0, 0) scale(1, 0.85);
+    filter: blur(5px);
+  }
+  50% {
+    opacity: 0.32;
+    transform: translateX(-50%) translate(2px, 2px) scale(0.82, 0.7);
+    filter: blur(7px);
+  }
+}
+
 @keyframes butterfly-bob {
   0%,
   100% {
@@ -638,13 +1352,16 @@ body {
 @keyframes butterfly-flight {
   0% {
     opacity: 0;
-    transform: translate(-28vw, 18vh) rotate(-12deg) scale(0.55);
+    transform: translate(-34vw, 24vh) rotate(-16deg) scale(0.38);
   }
-  40% {
+  18% {
     opacity: 1;
   }
-  70% {
-    transform: translate(4vw, -3vh) rotate(4deg) scale(1);
+  42% {
+    transform: translate(-10vw, 6vh) rotate(8deg) scale(0.78);
+  }
+  68% {
+    transform: translate(6vw, -4vh) rotate(-3deg) scale(1.05);
   }
   100% {
     opacity: 1;
@@ -661,66 +1378,51 @@ body {
 
 .quote {
   margin: 0;
-  margin-top: 1.25rem;
   text-align: center;
-  opacity: 0;
-  transform: translateY(14px);
+  opacity: 1;
+  transform: none;
 }
 
 .day-overlay.is-quoting .quote {
-  animation: quote-in 700ms 100ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: none;
 }
 
 .day-overlay.is-sheet .quote {
-  animation: fade-out-soft 450ms ease forwards;
-}
-
-@keyframes quote-in {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fade-out-soft {
-  to {
-    opacity: 0;
-    transform: translateY(-10px) scale(0.96);
-  }
+  animation: none;
 }
 
 .quote-text {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(1.25rem, 3.5vw, 1.65rem);
+  font-size: clamp(1.2rem, 3.4vw, 1.7rem);
   font-weight: 500;
-  line-height: 1.35;
+  line-height: 1.4;
   color: #f7fbf7;
-  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.25);
+  text-shadow: 0 2px 22px rgba(0, 0, 0, 0.35);
 }
 
 .quote-author {
   display: block;
-  margin-top: 0.65rem;
+  margin-top: 0.55rem;
   font-style: normal;
-  font-size: 0.92rem;
-  color: rgba(247, 251, 247, 0.85);
+  font-size: 0.9rem;
+  color: rgba(247, 251, 247, 0.8);
 }
 
 .kindness-idea {
-  margin: 1.1rem 0 0;
+  margin: 0.15rem 0 0;
   max-width: 26rem;
   text-align: center;
-  opacity: 0;
-  transform: translateY(10px);
+  opacity: 1;
+  transform: none;
 }
 
 .day-overlay.is-quoting .kindness-idea {
-  animation: quote-in 700ms 450ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: none;
 }
 
 .day-overlay.is-sheet .kindness-idea {
-  animation: fade-out-soft 450ms ease forwards;
+  animation: none;
 }
 
 .kindness-label {
@@ -745,7 +1447,7 @@ body {
 
 .journal-sheet {
   position: relative;
-  z-index: 3;
+  z-index: 5;
   width: min(640px, 100%);
   max-height: min(92vh, 820px);
   overflow-y: auto;
@@ -855,7 +1557,7 @@ body {
 
 .journal-header {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 76px minmax(0, 1fr) auto;
   align-items: center;
   gap: 0.85rem;
   margin-bottom: 0.85rem;
@@ -866,19 +1568,24 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 0.15rem;
-  min-width: 72px;
+  width: 76px;
+  max-width: 76px;
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
 .sheet-butterfly {
-  width: 72px;
-  height: 66px;
+  width: 64px;
+  height: 58px;
   display: grid;
   place-items: center;
+  overflow: hidden;
 }
 
 .butterfly--sheet {
-  width: 68px !important;
+  width: 58px !important;
   height: auto;
+  max-height: 52px;
   filter: drop-shadow(0 6px 10px rgba(20, 36, 50, 0.18));
   animation: sheet-butterfly-bob 3.2s ease-in-out infinite;
 }
@@ -903,18 +1610,22 @@ body {
 
 .sheet-butterfly-label {
   margin: 0;
-  font-size: 0.65rem;
+  font-size: 0.52rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
   color: color-mix(in srgb, var(--sheet-ink) 70%, transparent);
   text-align: center;
-  max-width: 76px;
-  line-height: 1.2;
+  max-width: 72px;
+  line-height: 1.15;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .journal-heading {
   min-width: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .journal-kicker {
@@ -932,6 +1643,8 @@ body {
   font-size: clamp(1.3rem, 3vw, 1.85rem);
   font-weight: 500;
   color: var(--sheet-ink);
+  line-height: 1.2;
+  overflow-wrap: break-word;
 }
 
 .close-btn {
@@ -949,6 +1662,14 @@ body {
   background: color-mix(in srgb, var(--sheet-ink) 14%, transparent);
 }
 
+.journal-compose {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
 .journal-body {
   flex: 1;
   width: 100%;
@@ -956,7 +1677,7 @@ body {
   resize: vertical;
   border: 1px solid rgba(47, 111, 94, 0.18);
   border-radius: 18px;
-  padding: 1rem 1.1rem;
+  padding: 1rem 3.1rem 1rem 1.1rem;
   font-family: var(--font-journal);
   font-size: 1.28rem;
   font-weight: 500;
@@ -972,6 +1693,66 @@ body {
 .journal-body:focus {
   border-color: rgba(47, 111, 94, 0.45);
   box-shadow: 0 0 0 3px rgba(91, 184, 154, 0.25);
+}
+
+.dictation-btn {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--sheet-accent, var(--accent)) 14%, #fff);
+  color: var(--sheet-accent, var(--accent));
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(20, 40, 32, 0.08);
+  transition: background 160ms ease, transform 160ms ease, color 160ms ease;
+}
+
+.dictation-btn:hover {
+  background: color-mix(in srgb, var(--sheet-accent, var(--accent)) 22%, #fff);
+  transform: translateY(-1px);
+}
+
+.dictation-btn:focus-visible {
+  outline: 2px solid var(--sheet-accent, var(--accent));
+  outline-offset: 2px;
+}
+
+.dictation-btn[aria-pressed="true"] {
+  background: var(--sheet-accent, var(--accent));
+  color: #f7fbf7;
+  animation: dictation-pulse 1.4s ease-in-out infinite;
+}
+
+.dictation-btn[hidden] {
+  display: none;
+}
+
+.dictation-btn__icon {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.dictation-status {
+  margin: 0.35rem 0 0;
+  min-height: 1.1em;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+@keyframes dictation-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--sheet-accent, var(--accent)) 35%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 8px color-mix(in srgb, var(--sheet-accent, var(--accent)) 0%, transparent);
+  }
 }
 
 .section-heading {
@@ -1512,16 +2293,30 @@ body {
   }
 
   .journal-header {
-    grid-template-columns: 64px 1fr auto;
+    grid-template-columns: 64px minmax(0, 1fr) auto;
     gap: 0.55rem;
   }
 
+  .sheet-butterfly-wrap {
+    width: 64px;
+    max-width: 64px;
+  }
+
   .sheet-butterfly {
-    width: 58px;
-    height: 54px;
+    width: 54px;
+    height: 50px;
   }
 
   .butterfly--sheet {
-    width: 54px !important;
+    width: 50px !important;
+    max-height: 46px;
+  }
+
+  .butterfly--sheet.butterfly--photo,
+  .butterfly--sheet img.butterfly-photo,
+  .bf-flight--sheet img.butterfly-photo {
+    width: 50px !important;
+    max-width: 50px;
+    max-height: 46px;
   }
 }

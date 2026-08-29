@@ -1,5 +1,5 @@
 /* Daywing — lightweight offline shell for Apple & Microsoft home-screen use */
-const CACHE = "daywing-shell-v1";
+const CACHE = "daywing-shell-v40";
 const SHELL = ["/", "/static/css/styles.css", "/static/js/app.js", "/static/manifest.webmanifest"];
 
 self.addEventListener("install", (event) => {

@@ -66,237 +66,194 @@ const KINDNESS_IDEAS = [
   "Spend one minute doing something kind for your future self.",
 ];
 
-/** Distinct butterfly looks — rotated on each day open. */
+/** Watercolor butterflies — same paper-illustration style as the Daywing card image. */
 const BUTTERFLIES = [
   {
-    id: "aurora",
-    left: ["#7ec8e3", "#c9a0dc", "#f7a8c8"],
-    right: ["#8fd3c8", "#a8d5e5", "#e8b4d4"],
-    spots: "#fff8",
-    body: "#2d2a26",
+    id: "teal-blush",
+    name: "Teal Blush",
+    upper: ["#5fa8a0", "#7eb8b0", "#a8d4ce"],
+    lower: ["#e6b7ab", "#d9a79c", "#c9958c"],
+    spots: "#f7f2e8",
+    body: "#1e3d32",
+    leaf: "#2f5c48",
+    vein: "#1e3d3255",
     shape: "classic",
-    theme: {
-      a: "#e8f4ff",
-      b: "#f3e8ff",
-      c: "#ffe8f3",
-      accent: "#7b6bb5",
-      ink: "#2a2540",
-    },
+    photo: "/static/butterflies/teal-blush.png",
+    theme: { a: "#f7fbf7", b: "#eef6e8", c: "#e8f4f1", accent: "#2f6f5e", ink: "#1f2d2a" },
+  },
+  {
+    id: "sky-swallowtail",
+    name: "Sky Swallowtail",
+    upper: ["#4aa8d4", "#7ec8e8", "#b5e0f4"],
+    lower: ["#f0c4a8", "#e8b090", "#d99a78"],
+    spots: "#fffaf2",
+    body: "#1a3a4a",
+    leaf: "#2d5a6a",
+    vein: "#1a3a4a55",
+    shape: "swallowtail",
+    photo: "/static/butterflies/sky-swallowtail.png",
+    theme: { a: "#e8f6ff", b: "#d8eef8", c: "#f8ebe4", accent: "#3d7ea6", ink: "#1a3a4a" },
+  },
+  {
+    id: "violet-copper",
+    name: "Violet Copper",
+    upper: ["#8b6bb5", "#a88bc9", "#c9b0e0"],
+    lower: ["#e8a888", "#f0b898", "#d99270"],
+    spots: "#faf5ff",
+    body: "#2a1f3d",
+    leaf: "#5a3d6a",
+    vein: "#2a1f3d55",
+    shape: "classic",
+    photo: "/static/butterflies/violet-copper.png",
+    theme: { a: "#f3eaff", b: "#e8dcf8", c: "#f8ebe4", accent: "#7b6bb5", ink: "#2a1f3d" },
+  },
+  {
+    id: "jade-wing",
+    name: "Jade Wing",
+    upper: ["#4aa882", "#6fc49a", "#a8dfc0"],
+    lower: ["#e8b8c8", "#f0c8d4", "#d9a0b0"],
+    spots: "#f4fff8",
+    body: "#1b4332",
+    leaf: "#2d6a4f",
+    vein: "#1b433255",
+    shape: "round",
+    photo: "/static/butterflies/jade-wing.png",
+    theme: { a: "#e8f8ef", b: "#d4f0e0", c: "#f8e8ef", accent: "#2d6a4f", ink: "#1b4332" },
+  },
+  {
+    id: "amber-morpho",
+    name: "Amber Morpho",
+    upper: ["#d4a04a", "#e8b86a", "#f0d090"],
+    lower: ["#6a9eb8", "#88b8cc", "#a8d0e0"],
+    spots: "#fff8e8",
+    body: "#3d2914",
+    leaf: "#5c4030",
+    vein: "#3d291455",
+    shape: "tall",
+    photo: "/static/butterflies/amber-morpho.png",
+    theme: { a: "#fff6e8", b: "#ffe8c8", c: "#e8f2f6", accent: "#c45c26", ink: "#3d2914" },
+  },
+  {
+    id: "rose-glasswing",
+    name: "Rose Glasswing",
+    upper: ["#e8a0b0", "#f0b8c4", "#f8d0d8"],
+    lower: ["#7eb8c8", "#9eccd8", "#c0e0e8"],
+    spots: "#fff5f7",
+    body: "#3d2a32",
+    leaf: "#5a3d48",
+    vein: "#3d2a3255",
+    shape: "wide",
+    photo: "/static/butterflies/rose-glasswing.png",
+    theme: { a: "#fff0f3", b: "#f8e4e8", c: "#e8f4f8", accent: "#b86b7a", ink: "#3d2a32" },
+  },
+  {
+    id: "indigo-pearl",
+    name: "Indigo Pearl",
+    upper: ["#4a6a9e", "#6a88b8", "#98b0d4"],
+    lower: ["#e8c8a0", "#f0d8b8", "#d9b888"],
+    spots: "#f2f6ff",
+    body: "#1a2438",
+    leaf: "#2d3d5a",
+    vein: "#1a243855",
+    shape: "classic",
+    photo: "/static/butterflies/indigo-pearl.png",
+    theme: { a: "#e8eef8", b: "#d8e2f0", c: "#f8efe4", accent: "#4a6a9e", ink: "#1a2438" },
   },
   {
     id: "monarch",
-    left: ["#f4a261", "#e76f51", "#f4d35e"],
-    right: ["#e9c46a", "#f4a261", "#e76f51"],
-    spots: "#fff6",
-    body: "#3d2914",
-    shape: "tall",
-    theme: {
-      a: "#fff4e6",
-      b: "#ffe0c2",
-      c: "#ffd6a8",
-      accent: "#c45c26",
-      ink: "#3d2914",
-    },
-  },
-  {
-    id: "jade",
-    left: ["#52b788", "#95d5b2", "#2d6a4f"],
-    right: ["#74c69d", "#d8f3dc", "#40916c"],
-    spots: "#e8fff0",
-    body: "#1b4332",
-    shape: "round",
-    theme: {
-      a: "#e8f8ef",
-      b: "#d4f0e0",
-      c: "#c6e9d6",
-      accent: "#2d6a4f",
-      ink: "#1b4332",
-    },
-  },
-  {
-    id: "violet",
-    left: ["#7b2cbf", "#c77dff", "#e0aaff"],
-    right: ["#9d4edd", "#c77dff", "#5a189a"],
-    spots: "#fff8",
-    body: "#240046",
+    name: "Monarch",
+    upper: ["#e87820", "#f09238", "#f5b060"],
+    lower: ["#d46818", "#c45c14", "#a84810"],
+    spots: "#ffffff",
+    body: "#1a1410",
+    leaf: "#2a2018",
+    vein: "#1a141088",
     shape: "classic",
-    theme: {
-      a: "#f4e9ff",
-      b: "#e7d4ff",
-      c: "#f8e8ff",
-      accent: "#7b2cbf",
-      ink: "#2a1248",
-    },
+    photo: "/static/butterflies/monarch.png",
+    theme: { a: "#fff6ec", b: "#ffe8d0", c: "#f0f4e8", accent: "#c45c14", ink: "#2a1a10" },
+  },
+];
+
+// Bright landing blooms — one stable pick per calendar day, colored to contrast wings.
+const FLOWERS = [
+  {
+    id: "coral-peony",
+    name: "Coral Peony",
+    type: "peony",
+    photo: "/static/flowers/coral-peony.png",
+    petals: ["#ff6b7a", "#ff8f9a", "#ffd0d6"],
+    center: ["#ffe08a", "#f0b429"],
+    stem: "#3f8f5a",
   },
   {
-    id: "sky",
-    left: ["#48cae4", "#90e0ef", "#00b4d8"],
-    right: ["#ade8f4", "#48cae4", "#0077b6"],
-    spots: "#ffffffcc",
-    body: "#023e8a",
-    shape: "wide",
-    theme: {
-      a: "#e6f8ff",
-      b: "#d2f1fb",
-      c: "#c5ebf8",
-      accent: "#0077b6",
-      ink: "#023e8a",
-    },
+    id: "sunburst-daisy",
+    name: "Sunburst Daisy",
+    type: "daisy",
+    photo: "/static/flowers/sunburst-daisy.png",
+    petals: ["#ffe566", "#ffd23a", "#fff6b0"],
+    center: ["#c45c1a", "#8a3a0c"],
+    stem: "#3d8a52",
   },
   {
-    id: "sunset",
-    left: ["#ff6b6b", "#ffd166", "#ef476f"],
-    right: ["#f9844a", "#ffd166", "#ff6b6b"],
-    spots: "#fff8e7",
-    body: "#3d1f1f",
-    shape: "tall",
-    theme: {
-      a: "#ffe9e4",
-      b: "#ffd9c8",
-      c: "#ffe6b8",
-      accent: "#d64b5a",
-      ink: "#3d1f1f",
-    },
+    id: "scarlet-poppy",
+    name: "Scarlet Poppy",
+    type: "poppy",
+    photo: "/static/flowers/scarlet-poppy.png",
+    petals: ["#ff2e3a", "#ff5a45", "#ffb0a0"],
+    center: ["#1a1a1a", "#3d2a14"],
+    stem: "#3f7a48",
   },
   {
-    id: "peacock",
-    left: ["#1d3557", "#457b9d", "#a8dadc"],
-    right: ["#1d3557", "#457b9d", "#f1faee"],
-    spots: "#e9c46a",
-    body: "#0b132b",
-    shape: "round",
-    style: "elaborate",
-    pattern: "eyespots",
-    vein: "#f1faeeaa",
-    edge: "#e9c46a",
-    theme: {
-      a: "#e8f2f6",
-      b: "#d5e7ef",
-      c: "#eef6e8",
-      accent: "#1d3557",
-      ink: "#0b132b",
-    },
+    id: "magenta-cosmos",
+    name: "Magenta Cosmos",
+    type: "cosmos",
+    photo: "/static/flowers/magenta-cosmos.png",
+    petals: ["#e0187a", "#ff4da6", "#ffb3d9"],
+    center: ["#ffe566", "#f0c020"],
+    stem: "#3d8f5c",
   },
   {
-    id: "glasswing",
-    left: ["#caf0f8", "#90e0ef88", "#ade8f4"],
-    right: ["#caf0f8", "#48cae488", "#ade8f4"],
-    spots: "#ffffff55",
-    body: "#415a77",
-    shape: "wide",
-    style: "elaborate",
-    pattern: "glass",
-    vein: "#415a77aa",
-    edge: "#ffffff88",
-    theme: {
-      a: "#f2fbff",
-      b: "#e8f6fb",
-      c: "#eef4f8",
-      accent: "#415a77",
-      ink: "#2f3e4e",
-    },
+    id: "tangerine-marigold",
+    name: "Tangerine Marigold",
+    type: "marigold",
+    photo: "/static/flowers/tangerine-marigold.png",
+    petals: ["#ff8a1a", "#ffb347", "#ffe0a0"],
+    center: ["#ffd24a", "#e09020"],
+    stem: "#3a7a4a",
   },
   {
-    id: "morpho",
-    left: ["#023e8a", "#0077b6", "#48cae4"],
-    right: ["#03045e", "#0077b6", "#90e0ef"],
-    spots: "#caf0f8",
-    body: "#012a4a",
-    shape: "tall",
-    style: "elaborate",
-    pattern: "iridescent",
-    vein: "#90e0ef99",
-    edge: "#caf0f8",
-    theme: {
-      a: "#e4f3ff",
-      b: "#cfe8ff",
-      c: "#d9efff",
-      accent: "#0077b6",
-      ink: "#012a4a",
-    },
+    id: "ivory-lily",
+    name: "Ivory Lily",
+    type: "lily",
+    photo: "/static/flowers/ivory-lily.png",
+    petals: ["#fff8f0", "#ffe8d6", "#ffd0c0"],
+    center: ["#f0c84a", "#c4782a"],
+    stem: "#3f8a55",
   },
   {
-    id: "painted-lady",
-    left: ["#e76f51", "#f4a261", "#e9c46a"],
-    right: ["#f4a261", "#e76f51", "#264653"],
-    spots: "#264653",
-    body: "#1b1b1b",
-    shape: "classic",
-    style: "elaborate",
-    pattern: "mosaic",
-    vein: "#1b1b1bcc",
-    edge: "#f4a261",
-    theme: {
-      a: "#fff0e6",
-      b: "#ffe3d1",
-      c: "#fff5d9",
-      accent: "#c45c26",
-      ink: "#264653",
-    },
+    id: "violet-iris",
+    name: "Violet Iris",
+    type: "iris",
+    photo: "/static/flowers/violet-iris.png",
+    petals: ["#7a3dff", "#a86bff", "#e0c4ff"],
+    center: ["#ffd24a", "#c9a020"],
+    stem: "#3d7a52",
   },
   {
-    id: "luna",
-    left: ["#d8f3dc", "#95d5b2", "#b7e4c7"],
-    right: ["#d8f3dc", "#74c69d", "#b7e4c7"],
-    spots: "#40916c",
-    body: "#1b4332",
-    shape: "swallowtail",
-    style: "elaborate",
-    pattern: "luna",
-    vein: "#2d6a4f99",
-    edge: "#95d5b2",
-    theme: {
-      a: "#eefaf1",
-      b: "#dff3e5",
-      c: "#e6f6ea",
-      accent: "#40916c",
-      ink: "#1b4332",
-    },
-  },
-  {
-    id: "crimson-lace",
-    left: ["#9b2226", "#ae2012", "#bb3e03"],
-    right: ["#9b2226", "#ca6702", "#bb3e03"],
-    spots: "#ffddd2",
-    body: "#370617",
-    shape: "round",
-    style: "elaborate",
-    pattern: "lace",
-    vein: "#ffddd2aa",
-    edge: "#ffba08",
-    theme: {
-      a: "#ffe9e6",
-      b: "#ffd7d0",
-      c: "#ffe8cc",
-      accent: "#9b2226",
-      ink: "#370617",
-    },
-  },
-  {
-    id: "night-orchid",
-    left: ["#3c096c", "#7b2cbf", "#c77dff"],
-    right: ["#240046", "#9d4edd", "#e0aaff"],
-    spots: "#ff9eed",
-    body: "#10002b",
-    shape: "tall",
-    style: "elaborate",
-    pattern: "eyespots",
-    vein: "#e0aaff99",
-    edge: "#ff9eed",
-    theme: {
-      a: "#f3e8ff",
-      b: "#e8d4ff",
-      c: "#fce7f8",
-      accent: "#7b2cbf",
-      ink: "#1a0a33",
-    },
+    id: "fuchsia-hibiscus",
+    name: "Fuchsia Hibiscus",
+    type: "hibiscus",
+    photo: "/static/flowers/fuchsia-hibiscus.png",
+    petals: ["#ff1f8f", "#ff5eb0", "#ffc2de"],
+    center: ["#ffea6a", "#d4a010"],
+    stem: "#348a4e",
   },
 ];
 
 const REVEAL = {
-  quoteAtMs: 1400,
-  sheetAtMs: 10000, // ~8.5s to read the quote after it appears
-  flightSec: 2.4,
+  quoteAtMs: 7800,
+  sheetAtMs: 12500,
+  flightSec: 7.5,
 };
 
 const monthTitle = document.getElementById("month-title");
@@ -311,6 +268,8 @@ const journalBody = document.getElementById("journal-body");
 const saveBtn = document.getElementById("save-entry");
 const closeBtn = document.getElementById("close-day");
 const saveStatus = document.getElementById("save-status");
+const dictationBtn = document.getElementById("dictation-btn");
+const dictationStatus = document.getElementById("dictation-status");
 const quoteText = document.querySelector(".quote-text");
 const quoteAuthor = document.querySelector(".quote-author");
 const kindnessText = document.querySelector(".kindness-text");
@@ -640,8 +599,29 @@ function pickKindnessIdea() {
 }
 
 function pickButterfly() {
-  const i = nextRotation("daywing-butterfly-rot-v4", BUTTERFLIES.length);
+  const i = nextRotation("daywing-butterfly-rot-v8", BUTTERFLIES.length);
   return BUTTERFLIES[i];
+}
+
+function hashIso(iso) {
+  let h = 2166136261;
+  for (let i = 0; i < iso.length; i++) {
+    h ^= iso.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+function pickFlower(iso, butterfly) {
+  // Stable per day; nudge away from butterfly-adjacent hues when possible.
+  let idx = hashIso(iso || "1970-01-01") % FLOWERS.length;
+  if (butterfly && butterfly.id) {
+    const bf = BUTTERFLIES.findIndex((b) => b.id === butterfly.id);
+    if (bf >= 0 && idx % BUTTERFLIES.length === bf % FLOWERS.length) {
+      idx = (idx + 3) % FLOWERS.length;
+    }
+  }
+  return FLOWERS[idx];
 }
 
 function displayName(spec) {
@@ -652,193 +632,24 @@ function displayName(spec) {
     .join(" ");
 }
 
-function wingPaths(shape) {
-  if (shape === "tall") {
-    return {
-      left: "M58 54 C34 0, 2 18, 16 54 C2 78, 30 98, 58 62 Z",
-      right: "M62 54 C86 0, 118 18, 104 54 C118 78, 90 98, 62 62 Z",
-    };
-  }
-  if (shape === "round") {
-    return {
-      left: "M58 52 C38 18, 8 28, 20 52 C8 72, 34 82, 58 58 Z",
-      right: "M62 52 C82 18, 112 28, 100 52 C112 72, 86 82, 62 58 Z",
-    };
-  }
-  if (shape === "wide") {
-    return {
-      left: "M58 52 C28 22, -4 40, 14 56 C-2 74, 28 86, 58 58 Z",
-      right: "M62 52 C92 22, 124 40, 106 56 C122 74, 92 86, 62 58 Z",
-    };
-  }
-  if (shape === "swallowtail") {
-    return {
-      left: "M58 50 C32 8, 4 22, 16 48 C6 62, 10 78, 28 82 L18 96 L36 84 C48 78, 54 66, 58 56 Z",
-      right: "M62 50 C88 8, 116 22, 104 48 C114 62, 110 78, 92 82 L102 96 L84 84 C72 78, 66 66, 62 56 Z",
-    };
-  }
-  return {
-    left: "M58 52 C30 10, 5 25, 18 52 C5 70, 28 88, 58 58 Z",
-    right: "M62 52 C90 10, 115 25, 102 52 C115 70, 92 88, 62 58 Z",
-  };
-}
-
-function elaborateDecor(side, spec, uid) {
-  const isLeft = side === "left";
-  const x = (n) => (isLeft ? n : 120 - n);
-  const vein = spec.vein || "#ffffff88";
-  const edge = spec.edge || "#ffffffaa";
-  const spots = spec.spots || "#fff8";
-  const pattern = spec.pattern || "eyespots";
-
-  const veins = `
-    <path d="M${x(58)} 52 Q${x(36)} 40 ${x(22)} 28" fill="none" stroke="${vein}" stroke-width="1.1" />
-    <path d="M${x(58)} 54 Q${x(34)} 54 ${x(16)} 56" fill="none" stroke="${vein}" stroke-width="1.1" />
-    <path d="M${x(58)} 56 Q${x(38)} 68 ${x(24)} 80" fill="none" stroke="${vein}" stroke-width="1.1" />
-    <path d="M${x(40)} 36 Q${x(28)} 48 ${x(30)} 66" fill="none" stroke="${vein}" stroke-width="0.8" opacity="0.7" />
-  `;
-
-  if (pattern === "eyespots") {
-    return `
-      ${veins}
-      <circle cx="${x(26)}" cy="40" r="9" fill="${spots}" opacity="0.95" />
-      <circle cx="${x(26)}" cy="40" r="5.5" fill="#111111" />
-      <circle cx="${x(26)}" cy="40" r="2.2" fill="#fff8e7" />
-      <circle cx="${x(36)}" cy="64" r="6" fill="${spots}" opacity="0.85" />
-      <circle cx="${x(36)}" cy="64" r="3.2" fill="#222" />
-      <circle cx="${x(18)}" cy="58" r="2.4" fill="${edge}" opacity="0.8" />
-      <path d="M${x(54)} 48 Q${x(42)} 36 ${x(30)} 30" fill="none" stroke="${edge}" stroke-width="1.4" opacity="0.55" />
-    `;
-  }
-
-  if (pattern === "banded") {
-    return `
-      ${veins}
-      <path d="M${x(50)} 28 Q${x(28)} 42 ${x(20)} 70" fill="none" stroke="#111" stroke-width="5" opacity="0.55" />
-      <path d="M${x(44)} 24 Q${x(22)} 44 ${x(18)} 76" fill="none" stroke="#111" stroke-width="3.2" opacity="0.4" />
-      <circle cx="${x(24)}" cy="36" r="3.5" fill="${spots}" />
-      <circle cx="${x(32)}" cy="70" r="2.8" fill="${spots}" />
-      <circle cx="${x(18)}" cy="58" r="2" fill="${edge}" />
-    `;
-  }
-
-  if (pattern === "glass") {
-    return `
-      ${veins}
-      <path d="M${x(48)} 34 L${x(28)} 42 L${x(34)} 58 Z" fill="#ffffff33" stroke="${vein}" stroke-width="0.7" />
-      <path d="M${x(36)} 48 L${x(20)} 54 L${x(28)} 70 Z" fill="#ffffff22" stroke="${vein}" stroke-width="0.7" />
-      <circle cx="${x(30)}" cy="40" r="2" fill="${spots}" />
-      <circle cx="${x(24)}" cy="62" r="1.6" fill="${edge}" />
-    `;
-  }
-
-  if (pattern === "iridescent") {
-    return `
-      ${veins}
-      <ellipse cx="${x(30)}" cy="44" rx="14" ry="10" fill="url(#${uid}-shine)" opacity="0.55" />
-      <circle cx="${x(22)}" cy="36" r="3" fill="${spots}" opacity="0.85" />
-      <circle cx="${x(34)}" cy="60" r="4" fill="${spots}" opacity="0.5" />
-      <circle cx="${x(18)}" cy="58" r="2" fill="${edge}" />
-      <path d="M${x(52)} 46 Q${x(38)} 30 ${x(22)} 26" fill="none" stroke="${edge}" stroke-width="1.2" opacity="0.5" />
-    `;
-  }
-
-  if (pattern === "mosaic") {
-    return `
-      ${veins}
-      <circle cx="${x(24)}" cy="34" r="3.2" fill="${spots}" />
-      <circle cx="${x(34)}" cy="42" r="2.4" fill="${edge}" />
-      <circle cx="${x(20)}" cy="50" r="2.8" fill="${spots}" />
-      <circle cx="${x(32)}" cy="56" r="2.2" fill="#264653" />
-      <circle cx="${x(26)}" cy="70" r="3" fill="${spots}" />
-      <circle cx="${x(40)}" cy="66" r="2" fill="${edge}" />
-      <path d="M${x(48)} 40 L${x(28)} 48 L${x(36)} 62" fill="none" stroke="#1b1b1b" stroke-width="1.1" opacity="0.55" />
-    `;
-  }
-
-  if (pattern === "luna") {
-    return `
-      ${veins}
-      <ellipse cx="${x(28)}" cy="46" rx="8" ry="11" fill="none" stroke="${spots}" stroke-width="2.2" opacity="0.85" />
-      <ellipse cx="${x(28)}" cy="46" rx="3.5" ry="5" fill="${spots}" opacity="0.35" />
-      <circle cx="${x(20)}" cy="34" r="1.8" fill="${edge}" />
-      <circle cx="${x(34)}" cy="68" r="2.2" fill="${edge}" />
-      <path d="M${x(52)} 50 Q${x(40)} 70 ${x(28)} 82" fill="none" stroke="${vein}" stroke-width="1.2" />
-    `;
-  }
-
-  if (pattern === "lace") {
-    return `
-      ${veins}
-      <path d="M${x(52)} 34 Q${x(34)} 28 ${x(20)} 36 Q${x(28)} 44 ${x(44)} 42 Z" fill="none" stroke="${edge}" stroke-width="1.3" opacity="0.8" />
-      <path d="M${x(50)} 58 Q${x(32)} 52 ${x(18)} 62 Q${x(28)} 72 ${x(42)} 68 Z" fill="none" stroke="${edge}" stroke-width="1.2" opacity="0.75" />
-      <circle cx="${x(26)}" cy="40" r="2.5" fill="${spots}" />
-      <circle cx="${x(34)}" cy="62" r="2.2" fill="${spots}" />
-      <circle cx="${x(18)}" cy="54" r="1.6" fill="${edge}" />
-      <circle cx="${x(40)}" cy="48" r="1.4" fill="${edge}" />
-    `;
-  }
-
-  return `
-    ${veins}
-    <circle cx="${x(28)}" cy="42" r="4" fill="${spots}" />
-    <circle cx="${x(38)}" cy="58" r="3" fill="${spots}" />
-  `;
-}
-
 function butterflySvg(spec, uid, sizeClass) {
-  const paths = wingPaths(spec.shape);
-  const [l0, l1, l2] = spec.left;
-  const [r0, r1, r2] = spec.right;
-  const elaborate = spec.style === "elaborate";
-
-  const leftDecor = elaborate
-    ? elaborateDecor("left", spec, uid)
-    : `
-      <circle cx="28" cy="42" r="4" fill="${spec.spots}" />
-      <circle cx="38" cy="58" r="3" fill="${spec.spots}" />
-    `;
-  const rightDecor = elaborate
-    ? elaborateDecor("right", spec, uid)
-    : `
-      <circle cx="92" cy="42" r="4" fill="${spec.spots}" />
-      <circle cx="82" cy="58" r="3" fill="${spec.spots}" />
-    `;
-
+  // Photoreal butterflies with a ground shadow that follows flight motion.
+  const src = spec.photo || `/static/butterflies/${spec.id}.png`;
+  const label = displayName(spec);
+  const isSheet = String(sizeClass).includes("butterfly--sheet");
   return `
-    <svg class="${sizeClass}" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs>
-        <linearGradient id="${uid}-L" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="${l0}" />
-          <stop offset="55%" stop-color="${l1}" />
-          <stop offset="100%" stop-color="${l2}" />
-        </linearGradient>
-        <linearGradient id="${uid}-R" x1="1" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="${r0}" />
-          <stop offset="55%" stop-color="${r1}" />
-          <stop offset="100%" stop-color="${r2}" />
-        </linearGradient>
-        <radialGradient id="${uid}-shine" cx="35%" cy="35%" r="65%">
-          <stop offset="0%" stop-color="#ffffffcc" />
-          <stop offset="55%" stop-color="#90e0ef55" />
-          <stop offset="100%" stop-color="#0077b600" />
-        </radialGradient>
-      </defs>
-      <g class="wing wing-left">
-        <path d="${paths.left}" fill="url(#${uid}-L)" />
-        ${leftDecor}
-      </g>
-      <g class="wing wing-right">
-        <path d="${paths.right}" fill="url(#${uid}-R)" />
-        ${rightDecor}
-      </g>
-      <ellipse class="body" cx="60" cy="55" rx="3.5" ry="14" fill="${spec.body}" />
-      <circle cx="60" cy="43" r="2.4" fill="${spec.body}" />
-      <path class="antenna a1" d="M58 42 Q50 28 46 22" fill="none" stroke="${spec.body}" stroke-width="1.5" stroke-linecap="round" />
-      <path class="antenna a2" d="M62 42 Q70 28 74 22" fill="none" stroke="${spec.body}" stroke-width="1.5" stroke-linecap="round" />
-      <circle cx="46" cy="22" r="1.4" fill="${spec.body}" />
-      <circle cx="74" cy="22" r="1.4" fill="${spec.body}" />
-    </svg>
+    <div class="bf-flight${isSheet ? " bf-flight--sheet" : ""}" data-bf="${uid}">
+      <span class="bf-shadow" aria-hidden="true"></span>
+      <img
+        class="${sizeClass} butterfly-photo"
+        src="${src}"
+        alt="${label}"
+        width="280"
+        height="280"
+        decoding="async"
+        draggable="false"
+      />
+    </div>
   `;
 }
 
@@ -858,16 +669,43 @@ function applySheetTheme(spec) {
   journalSheet.style.setProperty("--sheet-ink", theme.ink);
 }
 
+let butterfly3d = null;
+
 function renderButterfly(spec) {
   const stamp = Date.now();
   const name = displayName(spec);
-  const elaborate = spec.style === "elaborate";
-  const sizeClass = elaborate ? "butterfly butterfly--fancy" : "butterfly";
+  const sizeClass = "butterfly butterfly--photo";
 
   if (butterflyName) butterflyName.textContent = name;
   if (sheetButterflyLabel) sheetButterflyLabel.textContent = name;
 
-  butterflyHost.innerHTML = butterflySvg(spec, `bf-${spec.id}-${stamp}`, sizeClass);
+  if (butterfly3d) {
+    butterfly3d.destroy();
+    butterfly3d = null;
+  }
+
+  // Prefer real 3D flapping model when Three.js is available.
+  if (window.DaywingButterfly3D && window.THREE) {
+    butterflyHost.innerHTML = "";
+    butterflyHost.classList.add("butterfly-host--3d");
+    const traits =
+      (window.DaywingButterfly3D.personalityFor &&
+        window.DaywingButterfly3D.personalityFor(spec)) ||
+      null;
+    spec._flight = traits;
+    const landSeed = hashIso(`${spec._landIso || selectedDate || ""}:${spec.id}`);
+    butterfly3d = window.DaywingButterfly3D.mount(butterflyHost, spec, {
+      flightSec: traits ? traits.flightSec : REVEAL.flightSec,
+      startDelay: traits ? traits.delay : 0,
+      landingSeed: landSeed,
+      dateIso: spec._landIso || selectedDate || "",
+    });
+  } else {
+    butterflyHost.classList.remove("butterfly-host--3d");
+    butterflyHost.innerHTML = butterflySvg(spec, `bf-${spec.id}-${stamp}`, sizeClass);
+  }
+
+  // Compact photo remains on the journal sheet header.
   if (sheetButterfly) {
     sheetButterfly.innerHTML = butterflySvg(
       spec,
@@ -1289,7 +1127,15 @@ async function openDay(iso) {
 
   const quote = pickQuote();
   const butterfly = pickButterfly();
+  butterfly._flower = pickFlower(iso, butterfly);
+  butterfly._landIso = iso;
   renderButterfly(butterfly);
+
+  const traits = butterfly._flight || null;
+  const flightMs = Math.round(((traits && traits.flightSec) || REVEAL.flightSec) * 1000);
+  const delayMs = Math.round(((traits && traits.delay) || 0) * 1000);
+  const quoteAtMs = delayMs + flightMs + 200;
+  const sheetAtMs = quoteAtMs + 4200;
 
   quoteText.textContent = `“${quote.text}”`;
   quoteAuthor.textContent = `— ${quote.author}`;
@@ -1311,14 +1157,14 @@ async function openDay(iso) {
 
   overlay.hidden = false;
   overlay.classList.remove("is-open", "is-revealing", "is-quoting", "is-sheet");
-  overlay.style.setProperty("--flight-duration", `${REVEAL.flightSec}s`);
+  overlay.style.setProperty("--flight-duration", `${(delayMs + flightMs) / 1000}s`);
   // force reflow so animations restart
   void overlay.offsetWidth;
   overlay.classList.add("is-open", "is-revealing");
 
   revealTimers.push(
-    setTimeout(() => overlay.classList.add("is-quoting"), REVEAL.quoteAtMs),
-    setTimeout(() => overlay.classList.add("is-sheet"), REVEAL.sheetAtMs)
+    setTimeout(() => overlay.classList.add("is-quoting"), quoteAtMs),
+    setTimeout(() => overlay.classList.add("is-sheet"), sheetAtMs)
   );
 
   try {
@@ -1336,12 +1182,18 @@ async function openDay(iso) {
 
   // Focus planner after the sheet is visible
   revealTimers.push(
-    setTimeout(() => taskInput.focus({ preventScroll: true }), REVEAL.sheetAtMs + 200)
+    setTimeout(() => taskInput.focus({ preventScroll: true }), sheetAtMs + 200)
   );
 }
 
 function closeDay() {
   clearRevealTimers();
+  stopDictation();
+  if (butterfly3d) {
+    butterfly3d.destroy();
+    butterfly3d = null;
+  }
+  butterflyHost.classList.remove("butterfly-host--3d");
   overlay.classList.remove("is-open", "is-revealing", "is-quoting", "is-sheet");
   overlay.hidden = true;
   selectedDate = null;
@@ -1376,6 +1228,125 @@ function scheduleAutosave() {
   saveStatus.textContent = "Editing…";
   clearTimeout(saveTimer);
   saveTimer = setTimeout(saveEntry, 900);
+}
+
+const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
+let dictation = null;
+let dictationListening = false;
+
+function setDictationUi(listening, message = "") {
+  dictationListening = listening;
+  if (dictationBtn) {
+    dictationBtn.setAttribute("aria-pressed", listening ? "true" : "false");
+    dictationBtn.title = listening ? "Stop dictation" : "Dictate";
+    dictationBtn.setAttribute(
+      "aria-label",
+      listening ? "Stop dictation" : "Dictate journal entry"
+    );
+  }
+  if (dictationStatus) {
+    dictationStatus.textContent = message;
+  }
+}
+
+function appendDictation(text) {
+  const chunk = String(text || "").trim();
+  if (!chunk || !journalBody) return;
+  const cur = journalBody.value;
+  const needsSpace = cur && !/\s$/.test(cur);
+  journalBody.value = cur + (needsSpace ? " " : "") + chunk;
+  journalBody.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
+function stopDictation(message = "") {
+  if (dictation && dictationListening) {
+    try {
+      dictation.stop();
+    } catch (_) {
+      /* already stopped */
+    }
+  }
+  setDictationUi(false, message);
+}
+
+function startDictation() {
+  if (!SpeechRecognitionAPI || !dictationBtn) return;
+  if (!dictation) {
+    dictation = new SpeechRecognitionAPI();
+    dictation.continuous = true;
+    dictation.interimResults = true;
+    dictation.lang = navigator.language || "en-US";
+
+    dictation.onstart = () => {
+      setDictationUi(true, "Listening…");
+    };
+
+    dictation.onresult = (event) => {
+      let interim = "";
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const result = event.results[i];
+        const piece = result[0].transcript;
+        if (result.isFinal) {
+          appendDictation(piece);
+          if (dictationStatus) dictationStatus.textContent = "Listening…";
+        } else {
+          interim += piece;
+        }
+      }
+      if (interim && dictationStatus) {
+        dictationStatus.textContent = interim;
+      }
+    };
+
+    dictation.onerror = (event) => {
+      const err = event.error || "error";
+      if (err === "not-allowed" || err === "service-not-allowed") {
+        setDictationUi(false, "Microphone permission is needed for dictation.");
+      } else if (err === "no-speech") {
+        setDictationUi(false, "No speech heard — tap the mic to try again.");
+      } else if (err === "aborted") {
+        setDictationUi(false, "");
+      } else {
+        setDictationUi(false, "Dictation stopped.");
+      }
+    };
+
+    dictation.onend = () => {
+      // Chrome ends after pauses even with continuous — restart if still toggled on
+      if (dictationListening) {
+        try {
+          dictation.start();
+          return;
+        } catch (_) {
+          /* fall through */
+        }
+      }
+      setDictationUi(false, dictationStatus?.textContent === "Listening…" ? "" : dictationStatus?.textContent || "");
+    };
+  }
+
+  try {
+    dictation.start();
+    setDictationUi(true, "Listening…");
+  } catch (_) {
+    setDictationUi(false, "Could not start dictation.");
+  }
+}
+
+function toggleDictation() {
+  if (dictationListening) stopDictation();
+  else startDictation();
+}
+
+if (dictationBtn) {
+  if (!SpeechRecognitionAPI) {
+    dictationBtn.hidden = true;
+    if (dictationStatus) {
+      dictationStatus.textContent = "";
+    }
+  } else {
+    dictationBtn.addEventListener("click", toggleDictation);
+  }
 }
 
 prevBtn.addEventListener("click", async () => {
